@@ -3,6 +3,7 @@ package experiment;
 import java.util.*;
 
 public class TestBoardCell {
+	private Set adjList = new HashSet();
 
 	public TestBoardCell(int row, int col) {
 		
@@ -13,8 +14,8 @@ public class TestBoardCell {
 	}
 	
 	public Set<TestBoardCell> getAdjList(){
-		Set<TestBoardCell> adjList = new HashSet<>();
-		return adjList;
+		adjList.add(0);
+		return this.adjList;
 	}
 	
 	public void setRoom(boolean inRoom) {

@@ -3,6 +3,8 @@ package experiment;
 import java.util.*;
 
 public class TestBoard {
+	private TestBoardCell testBoard[][];
+	private Set target;
 	
 	public TestBoard(){
 		
@@ -12,14 +14,15 @@ public class TestBoard {
 		
 	}
 	
-	public Set<TestBoardCell> getTargets(){
-		Set<TestBoardCell> target = new HashSet<>();
+	public Set getTargets(){
+		target = new HashSet();
+		target.add(-1);
 		return target;
 	}
 	
 	public TestBoardCell getCell( int row, int col ) {
-		TestBoardCell testBoard = new TestBoardCell(0,0);
-		return testBoard;
+		testBoard = new TestBoardCell[1][1];
+		testBoard[0][0] = new TestBoardCell(-1,-1);
+		return this.testBoard[0][0];
 	}
-	
 }
