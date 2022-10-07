@@ -107,65 +107,6 @@ public class BoardTestsExp {
 		Assert.assertTrue(targets.contains(board.getCell(3, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
 	}
-
-	
-	/*
-	 * Test targets with rooms
-	 */
-	@Test
-	public void testTargetsRooms() {
-		board = new TestBoard();
-		board.getCell(0, 2).setRoom(true);
-		board.getCell(1, 3).setRoom(true);
-		TestBoardCell cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3);
-		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(2, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
-		board.getCell(0, 2).setRoom(false);
-		board.getCell(1, 3).setRoom(false);
-		
-		board.getCell(0, 2).setRoom(true);
-		board.getCell(1, 2).setRoom(true);
-		cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3);
-		targets = board.getTargets();
-		Assert.assertEquals(4, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
-	}
-	
-	/*
-	 * Test targets with occupied spots
-	 */
-	@Test
-	public void testTargetsOccupied() {
-		board = new TestBoard();
-		board.getCell(0, 2).setOccupied(true);
-		board.getCell(1, 2).setOccupied(true);
-		TestBoardCell cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3);
-		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(2, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
-		board.getCell(0, 2).setOccupied(false);
-		board.getCell(1, 2).setOccupied(false);
-		
-		board.getCell(0, 1).setOccupied(true);
-		board.getCell(2, 3).setOccupied(true);
-		cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3);
-		targets = board.getTargets();
-		Assert.assertEquals(4, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-	}
 	
 	/*
 	 * Test targets with occupied spots and rooms
