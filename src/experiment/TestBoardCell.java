@@ -3,35 +3,45 @@ package experiment;
 import java.util.*;
 
 public class TestBoardCell {
-	private Set adjList = new HashSet();
+	public int row, col;
+	private Boolean isRoom, isOccupied;
+	Set<TestBoardCell> adjList = new HashSet();
+	private char location;
 
-	public TestBoardCell(int row, int col) {
-		
+	public TestBoardCell(int row, int col, char loc) {
+		this.row = row;
+		this.col = col;
+		this.location = loc;
 	}
 	
-	public void addAdjacency(TestBoardCell cell) {
-		
-	}
-	
-	public Set<TestBoardCell> getAdjList(){
-		adjList.add(0);
-		return this.adjList;
-	}
+	public final Set<TestBoardCell> getAdjList() {
+		System.out.println(this.row + " " + this.col);
+        return this.adjList;
+    }
+
+    public final void addAdj(TestBoardCell cell) {
+    	System.out.println(cell.row + " " + cell.col);
+        this.adjList.add(cell);
+    }
 	
 	public void setRoom(boolean inRoom) {
-		
+		if (this.location != 'W' && this.location != 'X') {
+            this.isRoom = inRoom;
+        }
 	}
 	
-	public boolean isRoom() {
-		return false;
-	}
+	public final boolean isRoom() {
+        return (this.location != 'W' && this.location != 'X');
+    }
 	
 	public void setOccupied(boolean isOcc) {
-		
+		if (this.location == 'W') {
+            this.isOccupied = isOcc;
+        }
 	}
 	
-	public boolean getOccupied() {
-		return false;
+	public boolean isOccupied() {
+		return this.isOccupied;
 	}
 	
 }
