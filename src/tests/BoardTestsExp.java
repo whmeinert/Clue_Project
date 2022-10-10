@@ -38,12 +38,13 @@ public class BoardTestsExp {
 		Assert.assertTrue(testList.contains(board.getCell(3, 2)));
 		Assert.assertEquals(2, testList.size());
 		
-		cell = board.getCell(1, 3);
+		cell = board.getCell(1, 2);
 		testList = cell.getAdjList();
-		Assert.assertTrue(testList.contains(board.getCell(0, 3)));
-		Assert.assertTrue(testList.contains(board.getCell(1, 2)));
-		Assert.assertTrue(testList.contains(board.getCell(2, 3)));
-		Assert.assertEquals(3, testList.size());
+		Assert.assertTrue(testList.contains(board.getCell(0, 2)));
+		Assert.assertTrue(testList.contains(board.getCell(1, 1)));
+		Assert.assertTrue(testList.contains(board.getCell(1, 3)));
+		Assert.assertTrue(testList.contains(board.getCell(2, 2)));
+		Assert.assertEquals(4, testList.size());
 		
 		cell = board.getCell(3, 0);
 		testList = cell.getAdjList();
@@ -66,7 +67,7 @@ public class BoardTestsExp {
 		// Test dice roll of 2
 		board = new TestBoard();
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3, true);
+		board.calcTargets(cell, 3, false);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(6, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
@@ -78,7 +79,7 @@ public class BoardTestsExp {
 		
 		// Test dice roll of 2
 		cell = board.getCell(0, 0);
-		board.calcTargets(cell, 2, true);
+		board.calcTargets(cell, 2, false);
 		targets = board.getTargets();
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
@@ -87,20 +88,21 @@ public class BoardTestsExp {
 		
 		// Test starting location at 2, 2
 		cell = board.getCell(2, 2);
-		board.calcTargets(cell, 2, true);
+		board.calcTargets(cell, 2, false);
 		targets = board.getTargets();
-		Assert.assertEquals(5, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
+		Assert.assertEquals(6, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 0)));
 		Assert.assertTrue(targets.contains(board.getCell(3, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
+		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
 		
 		// Test dice roll of 6
 		cell = board.getCell(0, 0);
-		board.calcTargets(cell, 6, true);
+		board.calcTargets(cell, 6, false);
 		targets = board.getTargets();
-		Assert.assertEquals(6, targets.size());
+		Assert.assertEquals(7, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(2, 0)));

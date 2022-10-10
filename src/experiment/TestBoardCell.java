@@ -15,12 +15,12 @@ public class TestBoardCell {
 	}
 	
 	public final Set<TestBoardCell> getAdjList() {
-		System.out.println(this.row + " " + this.col);
+		//System.out.println(this.row + " " + this.col);
         return this.adjList;
     }
 
     public final void addAdj(TestBoardCell cell) {
-    	System.out.println(cell.row + " " + cell.col);
+    	//System.out.println(cell.row + " " + cell.col);
         this.adjList.add(cell);
     }
 	

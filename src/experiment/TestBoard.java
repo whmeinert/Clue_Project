@@ -22,54 +22,57 @@ public class TestBoard {
 		for( int i = 0; i < ROWS ; i++) {
 			for (int j = 0; j < COLS ; j++) {
 				if(i != 0 && j != 0 && i != ROWS-1 && j != COLS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 				} else if (i == 0 && j != 0 && j < COLS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 				} else if(j == 0 && i != 0 && i < ROWS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 				} else if(i == 0 && j == 0) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 				} else if (i == 0 && j == COLS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 				} else if(j == 0 && i == ROWS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 				} else if (i == ROWS && j < 0 && j < COLS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j+1]);
 				} else if(j == COLS-1 && i != 0 && i < ROWS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 					this.grid[i][j].addAdj(this.grid[i+1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 				} else if(i == ROWS-1 && j == COLS-1) {
-					System.out.println(i + " " + j + ": ");
+					//System.out.println(i + " " + j + ": ");
 					this.grid[i][j].addAdj(this.grid[i-1][j]);
 					this.grid[i][j].addAdj(this.grid[i][j-1]);
 				}
-				System.out.println();
+				//System.out.println();
 			}
 		}
 	}
 	
 	public final Set<TestBoardCell> getTargets() {
+		for(TestBoardCell c2 : targets) {
+			System.out.println(c2.row + " " + c2.col );
+		}
         return this.targets;
     }
 	
