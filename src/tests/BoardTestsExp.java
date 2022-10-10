@@ -67,7 +67,7 @@ public class BoardTestsExp {
 		// Test dice roll of 2
 		board = new TestBoard();
 		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 3, false);
+		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(6, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
@@ -79,7 +79,7 @@ public class BoardTestsExp {
 		
 		// Test dice roll of 2
 		cell = board.getCell(0, 0);
-		board.calcTargets(cell, 2, false);
+		board.calcTargets(cell, 2);
 		targets = board.getTargets();
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
@@ -88,7 +88,7 @@ public class BoardTestsExp {
 		
 		// Test starting location at 2, 2
 		cell = board.getCell(2, 2);
-		board.calcTargets(cell, 2, false);
+		board.calcTargets(cell, 2);
 		targets = board.getTargets();
 		Assert.assertEquals(6, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
@@ -100,7 +100,7 @@ public class BoardTestsExp {
 		
 		// Test dice roll of 6
 		cell = board.getCell(0, 0);
-		board.calcTargets(cell, 6, false);
+		board.calcTargets(cell, 6);
 		targets = board.getTargets();
 		Assert.assertEquals(7, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
@@ -115,13 +115,13 @@ public class BoardTestsExp {
 	/*
 	 * Test targets with rooms
 	 */
-	//@Test
+	@Test
 	public void testTargetsRooms() {
 		board = new TestBoard();
 		board.getCell(0, 2).setRoom(true);
 		board.getCell(1, 3).setRoom(true);
 		TestBoardCell cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3, true);
+		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(2, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(1, 3)));
@@ -132,7 +132,7 @@ public class BoardTestsExp {
 		board.getCell(0, 2).setRoom(true);
 		board.getCell(1, 2).setRoom(true);
 		cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3, true);
+		board.calcTargets(cell, 3);
 		targets = board.getTargets();
 		Assert.assertEquals(4, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
@@ -144,24 +144,24 @@ public class BoardTestsExp {
 	/*
 	 * Test targets with occupied spots
 	 */
-	//@Test
+	@Test
 	public void testTargetsOccupied() {
 		board = new TestBoard();
-		board.getCell(0, 2).setOccupied(true);
-		board.getCell(1, 2).setOccupied(true);
-		TestBoardCell cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3, true);
+		board.getCell(0, 1).setOccupied(true);
+		board.getCell(1, 1).setOccupied(true);
+		TestBoardCell cell = board.getCell(0, 0);
+		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(2, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
 		board.getCell(0, 2).setOccupied(false);
-		board.getCell(1, 2).setOccupied(false);
+		board.getCell(1,1).setOccupied(false);
 		
 		board.getCell(0, 1).setOccupied(true);
 		board.getCell(2, 3).setOccupied(true);
 		cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3, true);
+		board.calcTargets(cell, 3);
 		targets = board.getTargets();
 		Assert.assertEquals(4, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
@@ -173,13 +173,13 @@ public class BoardTestsExp {
 	/*
 	 * Test targets with occupied spots and rooms
 	 */
-	//@Test
+	@Test
 	public void testTargetsMixed() {
 		board = new TestBoard();
 		board.getCell(0, 2).setOccupied(true);
 		board.getCell(1, 2).setRoom(true);
 		TestBoardCell cell = board.getCell(0, 3);
-		board.calcTargets(cell, 3, true);
+		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(3, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));

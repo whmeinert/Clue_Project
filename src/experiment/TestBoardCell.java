@@ -15,29 +15,23 @@ public class TestBoardCell {
 	}
 	
 	public final Set<TestBoardCell> getAdjList() {
-		//System.out.println(this.row + " " + this.col);
         return this.adjList;
     }
 
     public final void addAdj(TestBoardCell cell) {
-    	//System.out.println(cell.row + " " + cell.col);
         this.adjList.add(cell);
     }
 	
 	public void setRoom(boolean inRoom) {
-		if (this.location != 'W' && this.location != 'X') {
-            this.isRoom = inRoom;
-        }
+        this.isRoom = inRoom;
 	}
 	
 	public final boolean isRoom() {
-        return (this.location != 'W' && this.location != 'X');
+        return isRoom;
     }
 	
 	public void setOccupied(boolean isOcc) {
-		if (this.location == 'W') {
-            this.isOccupied = isOcc;
-        }
+		this.isOccupied = isOcc;
 	}
 	
 	public boolean isOccupied() {
