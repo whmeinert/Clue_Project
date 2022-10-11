@@ -20,8 +20,8 @@ import clueGame.Room;
 public class FileInitTests {
 	// Constants that I will use to test whether the file was loaded correctly
 	public static final int LEGEND_SIZE = 11;
-	public static final int NUM_ROWS = 26;
-	public static final int NUM_COLUMNS = 24;
+	public static final int NUM_ROWS = 27;
+	public static final int NUM_COLUMNS = 25;
 
 	// NOTE: I made Board static because I only want to set it up one
 	// time (using @BeforeAll), no need to do setup before each test.
@@ -60,16 +60,16 @@ public class FileInitTests {
 	// These cells are white on the planning spreadsheet
 	@Test
 	public void FourDoorDirections() {
-		BoardCell cell = board.getCell(8, 7);
+		BoardCell cell = board.getCell(13, 7);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.LEFT, cell.getDoorDirection());
-		cell = board.getCell(7, 12);
+		cell = board.getCell(7, 2);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.UP, cell.getDoorDirection());
-		cell = board.getCell(4, 8);
+		cell = board.getCell(6, 19);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.RIGHT, cell.getDoorDirection());
-		cell = board.getCell(16, 9);
+		cell = board.getCell(10, 18);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.DOWN, cell.getDoorDirection());
 		// Test that walkways are not doors
@@ -101,7 +101,7 @@ public class FileInitTests {
 		assertEquals( room.getName(), "Guest Bedroom" ) ;
 		assertFalse( cell.isLabel() );
 		assertFalse( cell.isRoomCenter() ) ;
-		assertFalse( cell.isDoorway()) ;
+		assertFalse( cell.isDoorway() ) ;
 
 		// this is a label cell to test
 		cell = board.getCell(11, 2);
@@ -136,7 +136,7 @@ public class FileInitTests {
 		assertFalse( cell.isLabel() );
 		
 		// test a closet
-		cell = board.getCell(26, 24);
+		cell = board.getCell(18, 24);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Unused" ) ;
