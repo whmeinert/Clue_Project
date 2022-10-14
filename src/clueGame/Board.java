@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.util.*;
 
@@ -15,6 +16,8 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFile;
 	Map<Character, Room> roomMap;
+	private String configCSV;
+	private String configTXT;
 	/*
     * variable and methods used for singleton pattern
     */
@@ -47,15 +50,15 @@ public class Board {
     }
      
 	public void loadSetupConfig() throws Exception {
-		Object object = this.getClass().getResourceAsStream("ClueSetup306.txt");
-		if (object == null) {
-		    throw new FileNotFoundException("Could not find file ClueSetup306.txt");
+		InputStream reader = this.getClass().getResourceAsStream(configTXT);
+		if (reader == null) {
+		    throw new FileNotFoundException("Could not find file " + configTXT);
 		}
-		Scanner scanner = new Scanner((InputStream)object);
+		Scanner scanner = new Scanner(reader);
 		while (scanner.hasNextLine()) {
-		    object = scanner.nextLine();
-		    if (((String)object).substring(0, 2).contentEquals("//")) continue;
-		    String[] stringArray = ((String)object).split(",");
+			String currLine = scanner.nextLine();
+		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
+		    String[] stringArray = (currLine).split(",");
 		    char c = '\u0000';
 		    while (c < stringArray.length) {
 		        stringArray[c] = stringArray[c].trim();
@@ -74,16 +77,16 @@ public class Board {
 		        continue;
 		    }
 		    scanner.close();
-		    throw new BadConfigFormatException("Room file format incorrect at line: " + (String)object);
+		    throw new BadConfigFormatException("Room file format incorrect at line: " + currLine);
 		}
 		scanner.close();
 	}
 	
 	public void loadLayoutConfig() throws Exception{
 		ArrayList<String> arrayList = new ArrayList<String>();
-        InputStream inputStream = this.getClass().getResourceAsStream("ClueLayout306.csv");
+        InputStream inputStream = this.getClass().getResourceAsStream(configCSV);
         if (inputStream == null) {
-            throw new FileNotFoundException("Could not find file ClueLayout306.csv");
+            throw new FileNotFoundException("Could not find file " + configCSV);
         }
         Scanner scanner = new Scanner(inputStream);
         int n = 0;
@@ -214,7 +217,8 @@ public class Board {
         return this.grid[row][col];
     }
 	public void setConfigFiles(String string, String string2) {
-		// TODO Auto-generated method stub
+		this.configCSV = string;
+		this.configTXT = string2;
 		
 	}
 	
