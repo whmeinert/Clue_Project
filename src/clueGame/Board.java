@@ -36,7 +36,7 @@ public class Board {
     public void initialize()
     {
     	this.loadDataFiles();
-        this.DOWN();
+        this.fillTable();
     }
 	
     public final void loadDataFiles() {
@@ -85,85 +85,99 @@ public class Board {
 	}
 	
 	public void loadLayoutConfig() throws Exception{
-		ArrayList<String> arrayList = new ArrayList<String>();
+		ArrayList<String> boardRows = new ArrayList<String>();
 		FileReader reader;
+		
 		try {
 			reader = new FileReader(configCSV);
-		} catch (FileNotFoundException e) {
+		} 
+		catch (FileNotFoundException e) {
 			throw new FileNotFoundException("Could not find file " + configCSV);
 		};
+		
         Scanner scanner = new Scanner(reader);
+        
         int n = 0;
+        
         while (scanner.hasNextLine()) {
             String string = scanner.nextLine();
-            arrayList.add(string);
+            boardRows.add(string);
             if (n == 0) {
                 String[] stringArray = string.split(",");
                 this.COLS = stringArray.length;
             }
             ++n;
         }
+        
         scanner.close();
+        
         this.ROWS = n;
         this.grid = new BoardCell[this.ROWS][this.COLS];
+        
         n = 0;
-        for (String string : arrayList) {
+        
+        for (String string : boardRows) {
             String[] stringArray = string.split(",");
+            
             if (this.COLS != stringArray.length) {
                 scanner.close();
                 throw new BadConfigFormatException("Rows do not all have the same number of columns");
             }
-            int n2 = 0;
-            while (n2 < this.COLS) {
-                Room n3;
-                char c = stringArray[n2].charAt(0);
-                char c2 = '\u0000';
-                if (stringArray[n2].length() > 1) {
-                    c2 = stringArray[n2].charAt(1);
+            
+            int k = 0;
+            
+            while (k < this.COLS) {
+                Room currRoom;
+                char location = stringArray[k].charAt(0);
+                char dir = '\u0000';
+                if (stringArray[k].length() > 1) {
+                	dir = stringArray[k].charAt(1);
                 }
-                if ((n3 = (Room)this.roomMap.get(Character.valueOf(c))) == null) {
+                if ((currRoom = (Room)this.roomMap.get(Character.valueOf(location))) == null) {
                     scanner.close();
-                    throw new BadConfigFormatException("Room not defined " + stringArray[n2]);
+                    throw new BadConfigFormatException("Room not defined " + stringArray[k]);
                 }
-                this.grid[n][n2] = new BoardCell(n, n2, n3, c, c2);
-                if (c2 == '*') {
-                    n3.setCenterCell(this.grid[n][n2]);
+                this.grid[n][k] = new BoardCell(n, k, currRoom, location, dir);
+                if (dir == '*') {
+                	currRoom.setCenterCell(this.grid[n][k]);
                 }
-                if (c2 == '#') {
-                    n3.setLabelCell(this.grid[n][n2]);
+                if (dir == '#') {
+                	currRoom.setLabelCell(this.grid[n][k]);
                 }
-                ++n2;
+                ++k;
             }
             ++n;
         }
 	}
 	
-	private void DOWN() {
+	private void fillTable() {
         int currRow = 0;
         while (currRow < this.ROWS) {
             int currCol = 0;
             while (currCol < this.COLS) {
-                this.LEFT(currRow, currCol);
+                this.fillCells(currRow, currCol);
                 ++currCol;
             }
             ++currRow;
         }
     }
 
-    private void LEFT(int n, int n2) {
-        BoardCell currCell = this.grid[n][n2];
-        if (currCell.isWalkway()) {
-            this.PERSON(currCell, n - 1, n2, currCell.getDoorDirection() == DoorDirection.UP);
-            this.PERSON(currCell, n + 1, n2, currCell.getDoorDirection() == DoorDirection.DOWN);
-            this.PERSON(currCell, n, n2 - 1, currCell.getDoorDirection() == DoorDirection.LEFT);
-            this.PERSON(currCell, n, n2 + 1, currCell.getDoorDirection() == DoorDirection.RIGHT);
-        }
-        if ((currCell.getSecretPassage()) != '\u0000') {
-            currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
-        }
-    }
+	private void fillCells(int n, int n2) {
+		BoardCell currCell = this.grid[n][n2];
+		
+		if (currCell.isWalkway()) {
+		    this.fillAdj(currCell, n - 1, n2, currCell.getDoorDirection() == DoorDirection.UP);
+		    this.fillAdj(currCell, n + 1, n2, currCell.getDoorDirection() == DoorDirection.DOWN);
+		    this.fillAdj(currCell, n, n2 - 1, currCell.getDoorDirection() == DoorDirection.LEFT);
+		    this.fillAdj(currCell, n, n2 + 1, currCell.getDoorDirection() == DoorDirection.RIGHT);
+		} 
+		
+		if ((currCell.getSecretPassage()) != '\u0000') {
+		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
+		}
+	}
 
-    private void PERSON(BoardCell cell, int currRow, int currCol, boolean bl) {
+    private void fillAdj(BoardCell cell, int currRow, int currCol, boolean bl) {
         if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
             return;
         }
