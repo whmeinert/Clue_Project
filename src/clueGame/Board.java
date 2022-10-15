@@ -155,27 +155,22 @@ public class Board {
         while (currRow < this.ROWS) {
             int currCol = 0;
             while (currCol < this.COLS) {
-                this.fillCells(currRow, currCol);
+            	BoardCell currCell = this.grid[currRow][currCol]; 
+        		if (currCell.isWalkway()) {
+        		    this.fillAdj(currCell, currRow-1, currCol, currCell.getDoorDirection() == DoorDirection.UP);
+        		    this.fillAdj(currCell, currRow+1, currCol, currCell.getDoorDirection() == DoorDirection.DOWN);
+        		    this.fillAdj(currCell, currRow, currCol-1, currCell.getDoorDirection() == DoorDirection.LEFT);
+        		    this.fillAdj(currCell, currRow, currCol+1, currCell.getDoorDirection() == DoorDirection.RIGHT);
+        		} 
+        		
+        		if ((currCell.getSecretPassage()) != '\u0000') {
+        		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
+        		}
                 ++currCol;
             }
             ++currRow;
         }
     }
-
-	private void fillCells(int n, int k) {
-		BoardCell currCell = this.grid[n][k];
-		
-		if (currCell.isWalkway()) {
-		    this.fillAdj(currCell, n-1, k, currCell.getDoorDirection() == DoorDirection.UP);
-		    this.fillAdj(currCell, n+1, k, currCell.getDoorDirection() == DoorDirection.DOWN);
-		    this.fillAdj(currCell, n, k-1, currCell.getDoorDirection() == DoorDirection.LEFT);
-		    this.fillAdj(currCell, n, k+1, currCell.getDoorDirection() == DoorDirection.RIGHT);
-		} 
-		
-		if ((currCell.getSecretPassage()) != '\u0000') {
-		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
-		}
-	}
 
     private void fillAdj(BoardCell cell, int currRow, int currCol, boolean bl) {
         if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
