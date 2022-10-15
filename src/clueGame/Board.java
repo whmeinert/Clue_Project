@@ -162,14 +162,14 @@ public class Board {
         }
     }
 
-	private void fillCells(int n, int n2) {
-		BoardCell currCell = this.grid[n][n2];
+	private void fillCells(int n, int k) {
+		BoardCell currCell = this.grid[n][k];
 		
 		if (currCell.isWalkway()) {
-		    this.fillAdj(currCell, n - 1, n2, currCell.getDoorDirection() == DoorDirection.UP);
-		    this.fillAdj(currCell, n + 1, n2, currCell.getDoorDirection() == DoorDirection.DOWN);
-		    this.fillAdj(currCell, n, n2 - 1, currCell.getDoorDirection() == DoorDirection.LEFT);
-		    this.fillAdj(currCell, n, n2 + 1, currCell.getDoorDirection() == DoorDirection.RIGHT);
+		    this.fillAdj(currCell, n-1, k, currCell.getDoorDirection() == DoorDirection.UP);
+		    this.fillAdj(currCell, n+1, k, currCell.getDoorDirection() == DoorDirection.DOWN);
+		    this.fillAdj(currCell, n, k-1, currCell.getDoorDirection() == DoorDirection.LEFT);
+		    this.fillAdj(currCell, n, k+1, currCell.getDoorDirection() == DoorDirection.RIGHT);
 		} 
 		
 		if ((currCell.getSecretPassage()) != '\u0000') {
