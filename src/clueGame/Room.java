@@ -5,10 +5,14 @@ public class Room {
     private BoardCell centerCell;
     private BoardCell labelCell;
 	
+    // initialize room object
 	public Room(String name) {
 		this.name = name;
 	}
 
+	
+	// getters and setters
+	
 	public Object getName() {
 		return this.name;
 	}

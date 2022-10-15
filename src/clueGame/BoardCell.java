@@ -14,7 +14,7 @@ public class BoardCell {
 	private char secretPassage;
 	Room room;
 	
-
+	// initializes cells variables and finds what the direction, label, center, or secret passage is
 	public BoardCell(int row, int col, Room room, char location, char dir) {
 		this.row = row;
 		this.col = col;
@@ -50,6 +50,9 @@ public class BoardCell {
 	        }
 	    }
 	}
+	
+	
+	// Getters and setters for private variables
 	
 	public final Set<BoardCell> getAdjList() {
         return this.adjList;
@@ -106,7 +109,4 @@ public class BoardCell {
 	public boolean isUnused() {
 		return this.location == 'X';
 	}
-	
-	
-	
 }

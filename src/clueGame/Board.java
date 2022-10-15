@@ -39,6 +39,7 @@ public class Board {
         this.fillTable();
     }
 	
+    // Calls functions to load setup file and layout file and catches any errors thrown
     public final void loadDataFiles() {
         try {
             this.loadSetupConfig();
@@ -48,7 +49,8 @@ public class Board {
             System.out.println(exception.getMessage());
         }
     }
-     
+    
+    // Load Clue setup from file and read data into roomMap
 	public void loadSetupConfig() throws Exception {
 		FileReader reader;
 		try {
@@ -84,6 +86,7 @@ public class Board {
 		scanner.close();
 	}
 	
+	// Load Clue layout from file and read data into grid
 	public void loadLayoutConfig() throws Exception{
 		ArrayList<String> boardRows = new ArrayList<String>();
 		FileReader reader;
@@ -150,6 +153,7 @@ public class Board {
         }
 	}
 	
+	// Loops over every row and column and call function every for every cell
 	private void fillTable() {
         int currRow = 0;
         while (currRow < this.ROWS) {
@@ -162,6 +166,7 @@ public class Board {
         }
     }
 	
+	// For every cell fill in its adjList
 	private void fillCells(int currRow, int currCol) {
 		BoardCell currCell = this.grid[currRow][currCol];
 		
@@ -177,6 +182,7 @@ public class Board {
 		}
 	}
 
+	// Fill in adjList and test if the cell is unused or a room or a door
     private void fillAdj(BoardCell cell, int currRow, int currCol, boolean isDoor) {
         if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
             return;
@@ -199,10 +205,12 @@ public class Board {
         currCell.addAdj(cell);
     }
 	
+    // gets the list of targets
 	public final Set<BoardCell> getTargets() {
         return this.targets;
     }
 	
+	// calculates the targets for the given cell
 	public final void calcTargets(BoardCell cell, int numMoves) {
         this.targets = new HashSet();
         this.visited = new HashSet();
@@ -210,6 +218,7 @@ public class Board {
         this.calcRecurse(cell, numMoves);
     }
 
+	// the recursive call to calculate all possible targets
     private void calcRecurse(BoardCell cell, int numMoves) {
         Set<BoardCell> adj = cell.getAdjList();
         for (BoardCell move : adj) {
@@ -229,6 +238,9 @@ public class Board {
             this.visited.remove(move);
         }
     }
+    
+    
+    // Getters and setters for private variables
     
     public final BoardCell getCell(int row, int col) {
         return this.grid[row][col];
@@ -254,6 +266,9 @@ public class Board {
 	
 	public int getNumColumns() {
 		return this.COLS;
+	}
+	public Set<BoardCell> getAdjList(int i, int j) {
+		return this.grid[i][j].getAdjList();
 	}
 
 }
