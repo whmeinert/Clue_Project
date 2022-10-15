@@ -161,21 +161,23 @@ public class Board {
             ++currRow;
         }
     }
+	
 	private void fillCells(int currRow, int currCol) {
-		BoardCell currCell = this.grid[currRow][currCol]; 
+		BoardCell currCell = this.grid[currRow][currCol];
+		
 		if (currCell.isWalkway()) {
 		    this.fillAdj(currCell, currRow-1, currCol, currCell.getDoorDirection() == DoorDirection.UP);
 		    this.fillAdj(currCell, currRow+1, currCol, currCell.getDoorDirection() == DoorDirection.DOWN);
 		    this.fillAdj(currCell, currRow, currCol-1, currCell.getDoorDirection() == DoorDirection.LEFT);
 		    this.fillAdj(currCell, currRow, currCol+1, currCell.getDoorDirection() == DoorDirection.RIGHT);
-		} 
+		}
 		
 		if ((currCell.getSecretPassage()) != '\u0000') {
 		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
 		}
 	}
 
-    private void fillAdj(BoardCell cell, int currRow, int currCol, boolean bl) {
+    private void fillAdj(BoardCell cell, int currRow, int currCol, boolean isDoor) {
         if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
             return;
         }
@@ -184,7 +186,7 @@ public class Board {
             return;
         }
         if (currCell.isRoom()) {
-            if (!bl) {
+            if (!isDoor) {
                 return;
             }
             Room room = currCell.getRoom();

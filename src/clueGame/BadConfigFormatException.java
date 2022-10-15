@@ -6,11 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class BadConfigFormatException extends Exception {
-	public static String logFile = "text.txt";
+	public static String logFile = "logfile.txt";
     private BufferedWriter append;
 
     public BadConfigFormatException() {
-        super("A bad configuration exception has occurred");
+        super("The file was not configured properly");
     }
 
     public BadConfigFormatException(String string) {
@@ -25,7 +25,7 @@ public class BadConfigFormatException extends Exception {
             }
         }
         catch (IOException iOException) {
-            System.out.println("Error writing to log file: " + logFile);
+            System.out.println("Error writing to log: " + logFile);
             System.out.println(iOException.getMessage());
         }
     }
