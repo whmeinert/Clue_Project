@@ -11,11 +11,11 @@ public class Board {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
-	private int COLS = 25;
-	private int ROWS = 24;
+	private int COLS;
+	private int ROWS;
 	private String layoutConfigFile;
 	private String setupConfigFile;
-	Map<Character, Room> roomMap;
+	Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String configCSV;
 	private String configTXT;
 	/*
@@ -50,10 +50,12 @@ public class Board {
     }
      
 	public void loadSetupConfig() throws Exception {
-		InputStream reader = this.getClass().getResourceAsStream(configTXT);
-		if (reader == null) {
-		    throw new FileNotFoundException("Could not find file " + configTXT);
-		}
+		FileReader reader;
+		try {
+			reader = new FileReader(configTXT);
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException("Could not find file " + configTXT);
+		};
 		Scanner scanner = new Scanner(reader);
 		while (scanner.hasNextLine()) {
 			String currLine = scanner.nextLine();
@@ -84,11 +86,13 @@ public class Board {
 	
 	public void loadLayoutConfig() throws Exception{
 		ArrayList<String> arrayList = new ArrayList<String>();
-        InputStream inputStream = this.getClass().getResourceAsStream(configCSV);
-        if (inputStream == null) {
-            throw new FileNotFoundException("Could not find file " + configCSV);
-        }
-        Scanner scanner = new Scanner(inputStream);
+		FileReader reader;
+		try {
+			reader = new FileReader(configCSV);
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException("Could not find file " + configCSV);
+		};
+        Scanner scanner = new Scanner(reader);
         int n = 0;
         while (scanner.hasNextLine()) {
             String string = scanner.nextLine();
@@ -135,51 +139,50 @@ public class Board {
 	}
 	
 	private void DOWN() {
-        int n = 0;
-        while (n < this.ROWS) {
-            int n2 = 0;
-            while (n2 < this.COLS) {
-                this.LEFT(n, n2);
-                ++n2;
+        int currRow = 0;
+        while (currRow < this.ROWS) {
+            int currCol = 0;
+            while (currCol < this.COLS) {
+                this.LEFT(currRow, currCol);
+                ++currCol;
             }
-            ++n;
+            ++currRow;
         }
     }
 
     private void LEFT(int n, int n2) {
-        char c;
-        BoardCell c2 = this.grid[n][n2];
-        if (c2.isWalkway()) {
-            this.PERSON(c2, n - 1, n2, c2.getDoorDirection() == DoorDirection.UP);
-            this.PERSON(c2, n + 1, n2, c2.getDoorDirection() == DoorDirection.DOWN);
-            this.PERSON(c2, n, n2 - 1, c2.getDoorDirection() == DoorDirection.LEFT);
-            this.PERSON(c2, n, n2 + 1, c2.getDoorDirection() == DoorDirection.RIGHT);
+        BoardCell currCell = this.grid[n][n2];
+        if (currCell.isWalkway()) {
+            this.PERSON(currCell, n - 1, n2, currCell.getDoorDirection() == DoorDirection.UP);
+            this.PERSON(currCell, n + 1, n2, currCell.getDoorDirection() == DoorDirection.DOWN);
+            this.PERSON(currCell, n, n2 - 1, currCell.getDoorDirection() == DoorDirection.LEFT);
+            this.PERSON(currCell, n, n2 + 1, currCell.getDoorDirection() == DoorDirection.RIGHT);
         }
-        if ((c = c2.getSecretPassage()) != '\u0000') {
-            c2.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(c))).getCenterCell());
+        if ((currCell.getSecretPassage()) != '\u0000') {
+            currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
         }
     }
 
-    private void PERSON(BoardCell c, int n, int n2, boolean bl) {
-        if (n < 0 || n2 < 0 || n >= this.ROWS || n2 >= this.COLS) {
+    private void PERSON(BoardCell cell, int currRow, int currCol, boolean bl) {
+        if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
             return;
         }
-        BoardCell c2 = this.grid[n][n2];
-        if (c2.isUnused()) {
+        BoardCell currCell = this.grid[currRow][currCol];
+        if (currCell.isUnused()) {
             return;
         }
-        if (c2.isRoom()) {
+        if (currCell.isRoom()) {
             if (!bl) {
                 return;
             }
-            Room n3 = c2.getRoom();
-            c2 = n3.getCenterCell();
-            if (c.isDoorway()) {
-                c.setRoom(n3);
+            Room room = currCell.getRoom();
+            currCell = room.getCenterCell();
+            if (cell.isDoorway()) {
+                cell.setRoom(room);
             }
         }
-        c.addAdj(c2);
-        c2.addAdj(c);
+        cell.addAdj(currCell);
+        currCell.addAdj(cell);
     }
 	
 	public final Set<BoardCell> getTargets() {
@@ -216,6 +219,7 @@ public class Board {
     public final BoardCell getCell(int row, int col) {
         return this.grid[row][col];
     }
+    
 	public void setConfigFiles(String string, String string2) {
 		this.configCSV = string;
 		this.configTXT = string2;
@@ -230,16 +234,12 @@ public class Board {
 		return cell.getRoom();
 	}
 	
-	public String getName() {
-		return "";
-	}
 	public int getNumRows() {
-		// TODO Auto-generated method stub
-		return -1;
+		return this.ROWS;
 	}
+	
 	public int getNumColumns() {
-		// TODO Auto-generated method stub
-		return -1;
+		return this.COLS;
 	}
 
 }

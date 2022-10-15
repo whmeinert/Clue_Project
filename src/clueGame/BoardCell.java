@@ -4,13 +4,13 @@ import java.util.*;
 
 public class BoardCell {
 	public int row, col;
-	private Boolean isRoom, isOccupied;
+	private Boolean isRoom = false, isOccupied = false;
 	Set<BoardCell> adjList = new HashSet();
 	private char initial;
 	private char location;
-	private DoorDirection doorDirection;
-	private Boolean roomLabel;
-	private Boolean roomCenter;
+	private DoorDirection doorDirection = DoorDirection.NONE;
+	private Boolean roomLabel = false;
+	private Boolean roomCenter = false;
 	private char secretPassage;
 	Room room;
 	
@@ -64,7 +64,7 @@ public class BoardCell {
 	}
 	
 	public final boolean isRoom() {
-        return isRoom;
+        return this.location != 'W' && this.location != 'X';
     }
 	
 	public void setOccupied(boolean isOcc) {
@@ -76,43 +76,35 @@ public class BoardCell {
 	}
 
 	public boolean isDoorway() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.doorDirection != DoorDirection.NONE;
 	}
 
-	public Object getDoorDirection() {
-		// TODO Auto-generated method stub
-		return null;
+	public DoorDirection getDoorDirection() {
+		return this.doorDirection;
 	}
 
 	public boolean isLabel() {
-		// TODO Auto-generated method stub
-		return false;
+		return roomLabel;
 	}
 
 	public boolean isRoomCenter() {
-		// TODO Auto-generated method stub
-		return false;
+		return roomCenter;
 	}
 
 	public char getSecretPassage() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.secretPassage;
 	}
 
 	public boolean isWalkway() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.location == 'W';
 	}
 
 	public Room getRoom() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.room;
 	}
 
 	public boolean isUnused() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.location == 'X';
 	}
 	
 	
