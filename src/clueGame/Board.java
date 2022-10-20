@@ -246,10 +246,9 @@ public class Board {
         return this.grid[row][col];
     }
     
-	public void setConfigFiles(String string, String string2) {
-		this.configCSV = string;
-		this.configTXT = string2;
-		
+	public void setConfigFiles(String file1, String file2) {
+		this.configCSV = file1;
+		this.configTXT = file2;
 	}
 	
 	public final Room getRoom(char label) {

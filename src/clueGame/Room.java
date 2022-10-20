@@ -9,8 +9,8 @@ public class Room {
 	public Room(String name) {
 		this.name = name;
 	}
-
 	
+
 	// getters and setters
 	
 	public Object getName() {

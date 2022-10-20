@@ -5,7 +5,7 @@ import java.util.*;
 public class BoardCell {
 	public int row, col;
 	private Boolean isRoom = false, isOccupied = false;
-	Set<BoardCell> adjList = new HashSet();
+	private Set<BoardCell> adjList = new HashSet();
 	private char initial;
 	private char location;
 	private DoorDirection doorDirection = DoorDirection.NONE;
@@ -71,7 +71,9 @@ public class BoardCell {
     }
 	
 	public void setOccupied(boolean isOcc) {
-		this.isOccupied = isOcc;
+		if (this.location == 'W') {
+			this.isOccupied = isOcc;
+		}
 	}
 	
 	public boolean isOccupied() {
