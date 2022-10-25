@@ -68,26 +68,27 @@ public class Board {
 			String currLine = scanner.nextLine();
 		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
 		    String[] stringArray = (currLine).split(",");
-		    char c = '\u0000';
 		    int n = 0;
+		    
 		    while (n < stringArray.length) {
 		        stringArray[n] = stringArray[n].trim();
 		        ++n;
 		    }
 		    
+		    char descriptor = '\u0000';
 		    // check if current line is a room
 		    if (stringArray[0].contentEquals("Room")) {
-		        char c2 = stringArray[2].charAt(0);
+		        char currLoc = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
-		        this.roomMap.put(Character.valueOf(c2), room);
+		        this.roomMap.put(Character.valueOf(currLoc), room);
 		        continue;
 		    }
 		    
 		    // check if current line is a space
 		    if (stringArray[0].contentEquals("Space")) {
-		        c = stringArray[2].charAt(0);
+		        descriptor = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
-		        this.roomMap.put(Character.valueOf(c), room);
+		        this.roomMap.put(Character.valueOf(descriptor), room);
 		        continue;
 		    }
 		    
