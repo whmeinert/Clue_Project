@@ -11,8 +11,8 @@ public class Board {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
-	private int COLS;
-	private int ROWS;
+	private int cols;
+	private int rows;
 	private String layoutConfigFile;
 	private String setupConfigFile;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
@@ -107,29 +107,29 @@ public class Board {
             boardRows.add(string);
             if (n == 0) {
                 String[] stringArray = string.split(",");
-                this.COLS = stringArray.length;
+                this.cols = stringArray.length;
             }
             ++n;
         }
         
         scanner.close();
         
-        this.ROWS = n;
-        this.grid = new BoardCell[this.ROWS][this.COLS];
+        this.rows = n;
+        this.grid = new BoardCell[this.rows][this.cols];
         
         n = 0;
         
         for (String string : boardRows) {
             String[] stringArray = string.split(",");
             
-            if (this.COLS != stringArray.length) {
+            if (this.cols != stringArray.length) {
                 scanner.close();
                 throw new BadConfigFormatException("Rows do not all have the same number of columns");
             }
             
             int k = 0;
             
-            while (k < this.COLS) {
+            while (k < this.cols) {
                 Room currRoom;
                 char location = stringArray[k].charAt(0);
                 char dir = '\u0000';
@@ -156,9 +156,9 @@ public class Board {
 	// Loops over every row and column and call function every for every cell
 	private void fillTable() {
         int currRow = 0;
-        while (currRow < this.ROWS) {
+        while (currRow < this.rows) {
             int currCol = 0;
-            while (currCol < this.COLS) {
+            while (currCol < this.cols) {
             	fillCells(currRow, currCol);
                 ++currCol;
             }
@@ -184,7 +184,7 @@ public class Board {
 
 	// Fill in adjList and test if the cell is unused or a room or a door
     private void fillAdj(BoardCell cell, int currRow, int currCol, boolean isDoor) {
-        if (currRow < 0 || currCol < 0 || currRow >= this.ROWS || currCol >= this.COLS) {
+        if (currRow < 0 || currCol < 0 || currRow >= this.rows || currCol >= this.cols) {
             return;
         }
         BoardCell currCell = this.grid[currRow][currCol];
@@ -261,11 +261,11 @@ public class Board {
 	}
 	
 	public int getNumRows() {
-		return this.ROWS;
+		return this.rows;
 	}
 	
 	public int getNumColumns() {
-		return this.COLS;
+		return this.cols;
 	}
 	public Set<BoardCell> getAdjList(int i, int j) {
 		return this.grid[i][j].getAdjList();
