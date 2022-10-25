@@ -55,10 +55,11 @@ public class Board {
 		FileReader reader;
 		try {
 			reader = new FileReader(configTXT);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {		// Catch file not found exception
 			throw new FileNotFoundException("Could not find file " + configTXT);
 		};
 		Scanner scanner = new Scanner(reader);
+		// loop through config file
 		while (scanner.hasNextLine()) {
 			String currLine = scanner.nextLine();
 		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
@@ -68,12 +69,14 @@ public class Board {
 		        stringArray[c] = stringArray[c].trim();
 		        ++c;
 		    }
+		    // check if current line is a room
 		    if (stringArray[0].contentEquals("Room")) {
 		        char c2 = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
 		        this.roomMap.put(Character.valueOf(c2), room);
 		        continue;
 		    }
+		    // check if current line is a space
 		    if (stringArray[0].contentEquals("Space")) {
 		        c = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
@@ -81,6 +84,7 @@ public class Board {
 		        continue;
 		    }
 		    scanner.close();
+		    // if line is not a room or space throw BadConfigFormatExeption
 		    throw new BadConfigFormatException("Room file format incorrect at line: " + currLine);
 		}
 		scanner.close();
@@ -101,7 +105,7 @@ public class Board {
         Scanner scanner = new Scanner(reader);
         
         int n = 0;
-        
+        // loop through file and count number of rows and columns
         while (scanner.hasNextLine()) {
             String string = scanner.nextLine();
             boardRows.add(string);
@@ -118,7 +122,7 @@ public class Board {
         this.grid = new BoardCell[this.rows][this.cols];
         
         n = 0;
-        
+        // loop over every row and set each column
         for (String string : boardRows) {
             String[] stringArray = string.split(",");
             
@@ -128,7 +132,7 @@ public class Board {
             }
             
             int k = 0;
-            
+            // loop over every column and set the room and its center and label and its secret passages
             while (k < this.cols) {
                 Room currRoom;
                 char location = stringArray[k].charAt(0);
