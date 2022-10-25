@@ -16,8 +16,6 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFile;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private String configCSV;
-	private String configTXT;
 	/*
     * variable and methods used for singleton pattern
     */
@@ -54,9 +52,9 @@ public class Board {
 	public void loadSetupConfig() throws Exception {
 		FileReader reader;
 		try {
-			reader = new FileReader(configTXT);
+			reader = new FileReader(setupConfigFile);
 		} catch (FileNotFoundException e) {		// Catch file not found exception
-			throw new FileNotFoundException("Could not find file " + configTXT);
+			throw new FileNotFoundException("Could not find file " + setupConfigFile);
 		};
 		Scanner scanner = new Scanner(reader);
 		// loop through config file
@@ -96,10 +94,10 @@ public class Board {
 		FileReader reader;
 		
 		try {
-			reader = new FileReader(configCSV);
+			reader = new FileReader(layoutConfigFile);
 		} 
 		catch (FileNotFoundException e) {
-			throw new FileNotFoundException("Could not find file " + configCSV);
+			throw new FileNotFoundException("Could not find file " + layoutConfigFile);
 		};
 		
         Scanner scanner = new Scanner(reader);
@@ -251,8 +249,8 @@ public class Board {
     }
     
 	public void setConfigFiles(String csvFile, String txtFile) {
-		this.configCSV = csvFile;
-		this.configTXT = txtFile;
+		this.layoutConfigFile = csvFile;
+		this.setupConfigFile = txtFile;
 		
 	}
 	
