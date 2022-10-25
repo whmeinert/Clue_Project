@@ -16,18 +16,22 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFile;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	
 	/*
     * variable and methods used for singleton pattern
     */
     private static Board theInstance = new Board();
+    
     // constructor is private to ensure only one can be created
     private Board() {
            super() ;
     }
+    
     // this method returns the only Board
     public static Board getInstance() {
            return theInstance;
     }
+    
     /*
      * initialize the board (since we are using singleton pattern)
      */
@@ -42,8 +46,7 @@ public class Board {
         try {
             this.loadSetupConfig();
             this.loadLayoutConfig();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
@@ -51,22 +54,27 @@ public class Board {
     // Load Clue setup from file and read data into roomMap
 	public void loadSetupConfig() throws Exception {
 		FileReader reader;
+		
 		try {
 			reader = new FileReader(setupConfigFile);
 		} catch (FileNotFoundException e) {		// Catch file not found exception
 			throw new FileNotFoundException("Could not find file " + setupConfigFile);
 		};
+		
 		Scanner scanner = new Scanner(reader);
+		
 		// loop through config file
 		while (scanner.hasNextLine()) {
 			String currLine = scanner.nextLine();
 		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
 		    String[] stringArray = (currLine).split(",");
 		    char c = '\u0000';
+		    
 		    while (c < stringArray.length) {
 		        stringArray[c] = stringArray[c].trim();
 		        ++c;
 		    }
+		    
 		    // check if current line is a room
 		    if (stringArray[0].contentEquals("Room")) {
 		        char c2 = stringArray[2].charAt(0);
@@ -74,6 +82,7 @@ public class Board {
 		        this.roomMap.put(Character.valueOf(c2), room);
 		        continue;
 		    }
+		    
 		    // check if current line is a space
 		    if (stringArray[0].contentEquals("Space")) {
 		        c = stringArray[2].charAt(0);
@@ -81,6 +90,7 @@ public class Board {
 		        this.roomMap.put(Character.valueOf(c), room);
 		        continue;
 		    }
+		    
 		    scanner.close();
 		    // if line is not a room or space throw BadConfigFormatExeption
 		    throw new BadConfigFormatException("Room file format incorrect at line: " + currLine);
@@ -107,6 +117,7 @@ public class Board {
         while (scanner.hasNextLine()) {
             String string = scanner.nextLine();
             boardRows.add(string);
+            
             if (n == 0) {
                 String[] stringArray = string.split(",");
                 this.cols = stringArray.length;
@@ -135,17 +146,22 @@ public class Board {
                 Room currRoom;
                 char location = stringArray[k].charAt(0);
                 char dir = '\u0000';
+                
                 if (stringArray[k].length() > 1) {
                 	dir = stringArray[k].charAt(1);
                 }
+                
                 if ((currRoom = (Room)this.roomMap.get(Character.valueOf(location))) == null) {
                     scanner.close();
                     throw new BadConfigFormatException("Room not defined " + stringArray[k]);
                 }
+                
                 this.grid[n][k] = new BoardCell(n, k, currRoom, location, dir);
+                
                 if (dir == '*') {
                 	currRoom.setCenterCell(this.grid[n][k]);
                 }
+                
                 if (dir == '#') {
                 	currRoom.setLabelCell(this.grid[n][k]);
                 }
@@ -160,6 +176,7 @@ public class Board {
         int currRow = 0;
         while (currRow < this.rows) {
             int currCol = 0;
+            
             while (currCol < this.cols) {
             	fillCells(currRow, currCol);
                 ++currCol;
@@ -189,16 +206,21 @@ public class Board {
         if (currRow < 0 || currCol < 0 || currRow >= this.rows || currCol >= this.cols) {
             return;
         }
+        
         BoardCell currCell = this.grid[currRow][currCol];
+        
         if (currCell.isUnused()) {
             return;
         }
+        
         if (currCell.isRoom()) {
             if (!isDoor) {
                 return;
             }
+            
             Room room = currCell.getRoom();
             currCell = room.getCenterCell();
+            
             if (cell.isDoorway()) {
                 cell.setRoom(room);
             }
@@ -229,11 +251,14 @@ public class Board {
             }
             
             this.visited.add(move);
+            
             if (move.isRoom()) {
                 this.targets.add(move);
-            } else if (numMoves == 1) {
+            }
+            else if (numMoves == 1) {
                 this.targets.add(move);
-            } else {
+            }
+            else {
                 this.calcRecurse(move, numMoves - 1);
             }
             
@@ -269,6 +294,7 @@ public class Board {
 	public int getNumColumns() {
 		return this.cols;
 	}
+	
 	public Set<BoardCell> getAdjList(int i, int j) {
 		return this.grid[i][j].getAdjList();
 	}
