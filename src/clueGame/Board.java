@@ -69,10 +69,10 @@ public class Board {
 		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
 		    String[] stringArray = (currLine).split(",");
 		    char c = '\u0000';
-		    
-		    while (c < stringArray.length) {
-		        stringArray[c] = stringArray[c].trim();
-		        ++c;
+		    int n = 0;
+		    while (n < stringArray.length) {
+		        stringArray[n] = stringArray[n].trim();
+		        ++n;
 		    }
 		    
 		    // check if current line is a room
@@ -112,25 +112,25 @@ public class Board {
 		
         Scanner scanner = new Scanner(reader);
         
-        int n = 0;
+        int numRows = 0;
         // loop through file and count number of rows and columns
         while (scanner.hasNextLine()) {
             String string = scanner.nextLine();
             boardRows.add(string);
             
-            if (n == 0) {
+            if (numRows == 0) {
                 String[] stringArray = string.split(",");
                 this.cols = stringArray.length;
             }
-            ++n;
+            ++numRows;
         }
         
         scanner.close();
         
-        this.rows = n;
+        this.rows = numRows;
         this.grid = new BoardCell[this.rows][this.cols];
         
-        n = 0;
+        numRows = 0;
         // loop over every row and set each column
         for (String string : boardRows) {
             String[] stringArray = string.split(",");
@@ -140,34 +140,34 @@ public class Board {
                 throw new BadConfigFormatException("Rows do not all have the same number of columns");
             }
             
-            int k = 0;
+            int numCols = 0;
             // loop over every column and set the room and its center and label and its secret passages
-            while (k < this.cols) {
+            while (numCols < this.cols) {
                 Room currRoom;
-                char location = stringArray[k].charAt(0);
-                char dir = '\u0000';
+                char location = stringArray[numCols].charAt(0);
+                char descriptor = '\u0000';
                 
-                if (stringArray[k].length() > 1) {
-                	dir = stringArray[k].charAt(1);
+                if (stringArray[numCols].length() > 1) {
+                	descriptor = stringArray[numCols].charAt(1);
                 }
                 
                 if ((currRoom = (Room)this.roomMap.get(Character.valueOf(location))) == null) {
                     scanner.close();
-                    throw new BadConfigFormatException("Room not defined " + stringArray[k]);
+                    throw new BadConfigFormatException("Room not defined " + stringArray[numCols]);
                 }
                 
-                this.grid[n][k] = new BoardCell(n, k, currRoom, location, dir);
+                this.grid[numRows][numCols] = new BoardCell(numRows, numCols, currRoom, location, descriptor);
                 
-                if (dir == '*') {
-                	currRoom.setCenterCell(this.grid[n][k]);
+                if (descriptor == '*') {
+                	currRoom.setCenterCell(this.grid[numRows][numCols]);
                 }
                 
-                if (dir == '#') {
-                	currRoom.setLabelCell(this.grid[n][k]);
+                if (descriptor == '#') {
+                	currRoom.setLabelCell(this.grid[numRows][numCols]);
                 }
-                ++k;
+                ++numCols;
             }
-            ++n;
+            ++numRows;
         }
 	}
 	
