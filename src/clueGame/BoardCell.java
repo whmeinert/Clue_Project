@@ -20,6 +20,8 @@ public class BoardCell {
 		this.col = col;
 		this.location = location;
 		this.room = room;
+		
+		// set the direction of the cell or if it is a label or the center or a secret passage
 		switch (dir) {
         	case '<': {
 	        	this.doorDirection = DoorDirection.LEFT;
@@ -71,6 +73,7 @@ public class BoardCell {
     }
 	
 	public void setOccupied(boolean isOcc) {
+		// set the location to be occupied if the location is a walkway
 		if (this.location == 'W') {
 			this.isOccupied = isOcc;
 		}
