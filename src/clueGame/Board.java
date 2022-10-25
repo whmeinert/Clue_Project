@@ -63,10 +63,10 @@ public class Board {
 			String currLine = scanner.nextLine();
 		    if ((currLine).substring(0, 2).contentEquals("//")) continue;
 		    String[] stringArray = (currLine).split(",");
-		    char nullChar = '\u0000';
-		    while (nullChar < stringArray.length) {
-		        stringArray[nullChar] = stringArray[nullChar].trim();
-		        ++nullChar;
+		    char c = '\u0000';
+		    while (c < stringArray.length) {
+		        stringArray[c] = stringArray[c].trim();
+		        ++c;
 		    }
 		    if (stringArray[0].contentEquals("Room")) {
 		        char c2 = stringArray[2].charAt(0);
@@ -75,9 +75,9 @@ public class Board {
 		        continue;
 		    }
 		    if (stringArray[0].contentEquals("Space")) {
-		        nullChar = stringArray[2].charAt(0);
+		        c = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
-		        this.roomMap.put(Character.valueOf(nullChar), room);
+		        this.roomMap.put(Character.valueOf(c), room);
 		        continue;
 		    }
 		    scanner.close();
@@ -246,9 +246,10 @@ public class Board {
         return this.grid[row][col];
     }
     
-	public void setConfigFiles(String file1, String file2) {
-		this.configCSV = file1;
-		this.configTXT = file2;
+	public void setConfigFiles(String csvFile, String txtFile) {
+		this.configCSV = csvFile;
+		this.configTXT = txtFile;
+		
 	}
 	
 	public final Room getRoom(char label) {
