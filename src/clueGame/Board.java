@@ -20,7 +20,7 @@ public class Board {
 	/*
     * variable and methods used for singleton pattern
     */
-    private static Board theInstance = new Board();
+    private static final Board theInstance = new Board();
     
     // constructor is private to ensure only one can be created
     private Board() {
@@ -80,7 +80,7 @@ public class Board {
 		    if (stringArray[0].contentEquals("Room")) {
 		        char currLoc = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
-		        this.roomMap.put(Character.valueOf(currLoc), room);
+		        this.roomMap.put(currLoc, room);
 		        continue;
 		    }
 		    
@@ -88,7 +88,7 @@ public class Board {
 		    if (stringArray[0].contentEquals("Space")) {
 		        descriptor = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1]);
-		        this.roomMap.put(Character.valueOf(descriptor), room);
+		        this.roomMap.put(descriptor, room);
 		        continue;
 		    }
 		    
@@ -152,7 +152,7 @@ public class Board {
                 	descriptor = stringArray[numCols].charAt(1);
                 }
                 
-                if ((currRoom = (Room)this.roomMap.get(Character.valueOf(location))) == null) {
+                if ((currRoom = this.roomMap.get(location)) == null) {
                     scanner.close();
                     throw new BadConfigFormatException("Room not defined " + stringArray[numCols]);
                 }
@@ -198,7 +198,7 @@ public class Board {
 		}
 		
 		if ((currCell.getSecretPassage()) != '\u0000') {
-		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(Character.valueOf(currCell.getSecretPassage()))).getCenterCell());
+		    currCell.getRoom().getCenterCell().addAdj(((Room)this.roomMap.get(currCell.getSecretPassage())).getCenterCell());
 		}
 	}
 
@@ -237,8 +237,8 @@ public class Board {
 	
 	// calculates the targets for the given cell
 	public final void calcTargets(BoardCell cell, int numMoves) {
-        this.targets = new HashSet();
-        this.visited = new HashSet();
+        this.targets = new HashSet<>();
+        this.visited = new HashSet<>();
         this.visited.add(cell);
         this.calcRecurse(cell, numMoves);
     }
@@ -281,7 +281,7 @@ public class Board {
 	}
 	
 	public final Room getRoom(char label) {
-        return (Room)this.roomMap.get(Character.valueOf(label));
+        return this.roomMap.get(label);
     }
 	
 	public Room getRoom(BoardCell cell) {

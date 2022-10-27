@@ -4,10 +4,11 @@ import java.util.*;
 
 public class BoardCell {
 	public int row, col;
-	private Boolean isRoom = false, isOccupied = false;
-	private Set<BoardCell> adjList = new HashSet();
+	private final Boolean isRoom = false;
+	private Boolean isOccupied = false;
+	private final Set<BoardCell> adjList = new HashSet<>();
 	private char initial;
-	private char location;
+	private final char location;
 	private DoorDirection doorDirection = DoorDirection.NONE;
 	private Boolean roomLabel = false;
 	private Boolean roomCenter = false;
