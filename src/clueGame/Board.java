@@ -2,10 +2,7 @@ package clueGame;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.util.*;
-
-import experiment.TestBoardCell;
 
 public class Board {
 	private BoardCell[][] grid;
@@ -18,13 +15,13 @@ public class Board {
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	
 	/*
-    * variable and methods used for singleton pattern
-    */
+     * variable and methods used for singleton pattern
+     */
     private static final Board theInstance = new Board();
     
     // constructor is private to ensure only one can be created
     private Board() {
-           super() ;
+           super();
     }
     
     // this method returns the only Board
