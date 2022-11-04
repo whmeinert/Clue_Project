@@ -13,12 +13,12 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFile;
     private ArrayList hand;
-    private Solution sol;
-    private ComputerPlayer add;
-    private ArrayList WEAPON;
+    private Solution solution;
+    private HumanPlayer humanPlayer;
+    private ArrayList<Player> players;
 
-    private Player addMouseListener;
-    private ArrayList addToHand;
+    private Player player;
+    private ArrayList<Card> addToHand;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
     Random startLoc = new Random();
 	
@@ -41,8 +41,8 @@ public class Board {
      * initialize the board (since we are using singleton pattern)
      */
     public void initialize() {
-        this.WEAPON = new ArrayList();
-        this.addToHand = new ArrayList();
+        this.players = new ArrayList<Player>();
+        this.addToHand = new ArrayList<Card>();
     	this.loadDataFiles();
         this.fillTable();
         this.deal();
@@ -89,6 +89,7 @@ public class Board {
 		        char currLoc = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1], card);
 		        this.roomMap.put(currLoc, room);
+                this.addToHand.add(card);
 		        continue;
 		    }
 		    
@@ -101,14 +102,14 @@ public class Board {
 		    }
 
             if (stringArray[0].contentEquals("Player")) {
-                Player m;
+                Player currPlayer;
                 if (stringArray[2].contentEquals("human")) {
-                    this.add = new ComputerPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
-                    m = this.add;
+                    this.humanPlayer = new HumanPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
+                    currPlayer = this.humanPlayer;
                 } else {
-                    m = new HumanPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
+                    currPlayer = new ComputerPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
                 }
-                this.WEAPON.add(m);
+                this.players.add(currPlayer);
                 this.addToHand.add(new Card(stringArray[1], CardType.PERSON));
                 continue;
             }
@@ -295,27 +296,27 @@ public class Board {
     public final void deal() {
         int n = 0;
         Collections.shuffle(this.addToHand, this.startLoc);
-        this.sol = new Solution();
-        for (Object object : this.WEAPON) {
-            ((Player)object).clearCards();
+        this.solution = new Solution();
+        for (Player player : this.players) {
+            player.clearCards();
         }
-        for (Object object : this.addToHand) {
-            if (((Card)object).getCardType() == CardType.PERSON && this.sol.person == null) {
-                this.sol.person = (Card)object;
+        for (Card object : this.addToHand) {
+            if (object.getCardType() == CardType.PERSON && this.solution.person == null) {
+                this.solution.person = object;
                 continue;
             }
-            if (((Card)object).getCardType() == CardType.ROOM && this.sol.room == null) {
-                this.sol.room = (Card)object;
+            if (object.getCardType() == CardType.ROOM && this.solution.room == null) {
+                this.solution.room = object;
                 continue;
             }
-            if (((Card)object).getCardType() == CardType.WEAPON && this.sol.weapon == null) {
-                this.sol.weapon = (Card)object;
+            if (object.getCardType() == CardType.WEAPON && this.solution.weapon == null) {
+                this.solution.weapon = object;
                 continue;
             }
-            Player m = (Player)this.WEAPON.get(n);
-            m.addToHand((Card)object);
-            ((Card)object).setHoldingPlayer(m);
-            n = (n + 1) % this.WEAPON.size();
+            Player m = this.players.get(n);
+            m.addToHand(object);
+            object.setHoldingPlayer(m);
+            n = (n + 1) % this.players.size();
         }
         Collections.sort(this.addToHand);
     }
@@ -354,7 +355,35 @@ public class Board {
 	}
 
     public final ArrayList getCards() {
-        return this.hand;
+        return this.addToHand;
+    }
+
+    public final Card getCard(String string) {
+        for (Card d : this.addToHand) {
+            if (!d.getCardName().equals(string)) continue;
+            return d;
+        }
+        return null;
+    }
+
+    public final ArrayList getPlayers() {
+        return this.players;
+    }
+
+    public final Player getPlayer(int n) {
+        return (Player)this.players.get(n);
+    }
+
+    public final int getNumPlayers() {
+        return this.players.size();
+    }
+
+    public final Solution getSolution() {
+        return this.solution;
+    }
+
+    public final HumanPlayer getHuman() {
+        return this.humanPlayer;
     }
 
 }

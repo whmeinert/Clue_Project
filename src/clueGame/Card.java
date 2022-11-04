@@ -1,13 +1,13 @@
 package clueGame;
 
 public class Card implements Comparable{
-    private String compareTo;
-    private CardType equals;
-    private Player getCardName;
+    private String cardName;
+    private CardType cardType;
+    private Player holdingPlayer;
 
     public Card(String string, CardType b) {
-        this.compareTo = string;
-        this.equals = b;
+        this.cardName = string;
+        this.cardType = b;
     }
 
     public final boolean equals(Object object) {
@@ -18,31 +18,31 @@ public class Card implements Comparable{
             return false;
         }
         Card d = (Card)object;
-        return this.compareTo.equals(d.compareTo) && this.equals == d.equals;
+        return this.cardName.equals(d.cardName) && this.cardType == d.cardType;
     }
 
     public final void setHoldingPlayer(Player m) {
-        this.getCardName = m;
+        this.holdingPlayer = m;
     }
 
     public final CardType getCardType() {
-        return this.equals;
+        return this.cardType;
     }
 
     public final String getCardName() {
-        return this.compareTo;
+        return this.cardName;
     }
 
     public final Player getHoldingPlayer() {
-        return this.getCardName;
+        return this.holdingPlayer;
     }
 
     public final int compareTo(Card d) {
-        return this.compareTo.compareTo(d.getCardName());
+        return this.cardName.compareTo(d.getCardName());
     }
 
     public final String toString() {
-        return this.compareTo;
+        return this.cardName;
     }
 
     @Override

@@ -1,15 +1,12 @@
 package clueGame;
 
-import java.util.*;
-
 public class HumanPlayer extends Player{
-
-    public HumanPlayer(String string, int n, int n2, String string2) {
-        super(string, n, n2, string2);
+    public HumanPlayer(String name, int row, int col, String color) {
+        super(name, row, col, color);
     }
 
     @Override
-    public void makeMove() {
+    public final void makeMove() {
 
     }
 }
