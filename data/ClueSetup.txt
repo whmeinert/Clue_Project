@@ -11,3 +11,17 @@ Room, Kitchen, K
 // other spaces on board
 Space, Unused, X
 Space, Walkway, W
+// players
+Player, Miss Scarlett, human, 0, 17, red
+Player, Colonel Mustard, computer, 9, 24, orange
+Player, Mrs. White, computer, 26, 16, white
+Player, Reverend Green, computer, 24, 9, green
+Player, Mrs. Peacock, computer, 20, 0, blue
+Player, Professor Plum, computer, 7, 0, purple
+// weapons
+Weapon, Candlestick
+Weapon, Dagger
+Weapon, Lead Pipe
+Weapon, Revolver
+Weapon, Rope
+Weapon, Wrench

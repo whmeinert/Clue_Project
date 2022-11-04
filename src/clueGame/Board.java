@@ -12,13 +12,21 @@ public class Board {
 	private int rows;
 	private String layoutConfigFile;
 	private String setupConfigFile;
+    private ArrayList hand;
+    private Solution sol;
+    private ComputerPlayer add;
+    private ArrayList WEAPON;
+
+    private Player addMouseListener;
+    private ArrayList addToHand;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
+    Random startLoc = new Random();
 	
 	/*
      * variable and methods used for singleton pattern
      */
     private static final Board theInstance = new Board();
-    
+
     // constructor is private to ensure only one can be created
     private Board() {
            super();
@@ -32,10 +40,12 @@ public class Board {
     /*
      * initialize the board (since we are using singleton pattern)
      */
-    public void initialize()
-    {
+    public void initialize() {
+        this.WEAPON = new ArrayList();
+        this.addToHand = new ArrayList();
     	this.loadDataFiles();
         this.fillTable();
+        this.deal();
     }
 	
     // Calls functions to load setup file and layout file and catches any errors thrown
@@ -75,8 +85,9 @@ public class Board {
 		    char descriptor = '\u0000';
 		    // check if current line is a room
 		    if (stringArray[0].contentEquals("Room")) {
+                Card card = new Card(stringArray[1], CardType.ROOM);
 		        char currLoc = stringArray[2].charAt(0);
-		        Room room = new Room(stringArray[1]);
+		        Room room = new Room(stringArray[1], card);
 		        this.roomMap.put(currLoc, room);
 		        continue;
 		    }
@@ -84,10 +95,27 @@ public class Board {
 		    // check if current line is a space
 		    if (stringArray[0].contentEquals("Space")) {
 		        descriptor = stringArray[2].charAt(0);
-		        Room room = new Room(stringArray[1]);
+		        Room room = new Room(stringArray[1], null);
 		        this.roomMap.put(descriptor, room);
 		        continue;
 		    }
+
+            if (stringArray[0].contentEquals("Player")) {
+                Player m;
+                if (stringArray[2].contentEquals("human")) {
+                    this.add = new ComputerPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
+                    m = this.add;
+                } else {
+                    m = new HumanPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
+                }
+                this.WEAPON.add(m);
+                this.addToHand.add(new Card(stringArray[1], CardType.PERSON));
+                continue;
+            }
+            if (stringArray[0].contentEquals("Weapon")) {
+                this.addToHand.add(new Card(stringArray[1], CardType.WEAPON));
+                continue;
+            }
 		    
 		    scanner.close();
 		    // if line is not a room or space throw BadConfigFormatExeption
@@ -263,6 +291,34 @@ public class Board {
             this.visited.remove(move);
         }
     }
+
+    public final void deal() {
+        int n = 0;
+        Collections.shuffle(this.addToHand, this.startLoc);
+        this.sol = new Solution();
+        for (Object object : this.WEAPON) {
+            ((Player)object).clearCards();
+        }
+        for (Object object : this.addToHand) {
+            if (((Card)object).getCardType() == CardType.PERSON && this.sol.person == null) {
+                this.sol.person = (Card)object;
+                continue;
+            }
+            if (((Card)object).getCardType() == CardType.ROOM && this.sol.room == null) {
+                this.sol.room = (Card)object;
+                continue;
+            }
+            if (((Card)object).getCardType() == CardType.WEAPON && this.sol.weapon == null) {
+                this.sol.weapon = (Card)object;
+                continue;
+            }
+            Player m = (Player)this.WEAPON.get(n);
+            m.addToHand((Card)object);
+            ((Card)object).setHoldingPlayer(m);
+            n = (n + 1) % this.WEAPON.size();
+        }
+        Collections.sort(this.addToHand);
+    }
     
     
     // Getters and setters for private variables
@@ -296,5 +352,9 @@ public class Board {
 	public Set<BoardCell> getAdjList(int i, int j) {
 		return this.grid[i][j].getAdjList();
 	}
+
+    public final ArrayList getCards() {
+        return this.hand;
+    }
 
 }

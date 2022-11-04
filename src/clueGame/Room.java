@@ -4,10 +4,12 @@ public class Room {
 	private final String name;
     private BoardCell centerCell;
     private BoardCell labelCell;
+	private Card card;
 	
     // initialize room object
-	public Room(String name) {
+	public Room(String name, Card card) {
 		this.name = name;
+		this.card = card;
 	}
 	
 
@@ -34,7 +36,9 @@ public class Room {
 		this.labelCell = boardCell;
 		
 	}
-	
-	
+
+	public final Card getCard() {
+		return this.card;
+	}
 	
 }
