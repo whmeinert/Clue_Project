@@ -8,9 +8,9 @@ public class Solution {
     public Solution() {
     }
 
-    public Solution(Card d, Card d2, Card d3) {
-        this.person = d;
-        this.weapon = d3;
-        this.room = d2;
+    public Solution(Card person, Card room, Card weapon) {
+        this.person = person;
+        this.weapon = weapon;
+        this.room = room;
     }
 }

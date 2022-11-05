@@ -12,15 +12,12 @@ public class Board {
 	private int rows;
 	private String layoutConfigFile;
 	private String setupConfigFile;
-    private ArrayList hand;
     private Solution solution;
     private HumanPlayer humanPlayer;
     private ArrayList<Player> players;
-
-    private Player player;
-    private ArrayList<Card> addToHand;
+    private ArrayList<Card> cards;
 	Map<Character, Room> roomMap = new HashMap<Character, Room>();
-    Random startLoc = new Random();
+    Random random = new Random();
 	
 	/*
      * variable and methods used for singleton pattern
@@ -42,7 +39,7 @@ public class Board {
      */
     public void initialize() {
         this.players = new ArrayList<Player>();
-        this.addToHand = new ArrayList<Card>();
+        this.cards = new ArrayList<Card>();
     	this.loadDataFiles();
         this.fillTable();
         this.deal();
@@ -89,7 +86,7 @@ public class Board {
 		        char currLoc = stringArray[2].charAt(0);
 		        Room room = new Room(stringArray[1], card);
 		        this.roomMap.put(currLoc, room);
-                this.addToHand.add(card);
+                this.cards.add(card);
 		        continue;
 		    }
 		    
@@ -110,11 +107,11 @@ public class Board {
                     currPlayer = new ComputerPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
                 }
                 this.players.add(currPlayer);
-                this.addToHand.add(new Card(stringArray[1], CardType.PERSON));
+                this.cards.add(new Card(stringArray[1], CardType.PERSON));
                 continue;
             }
             if (stringArray[0].contentEquals("Weapon")) {
-                this.addToHand.add(new Card(stringArray[1], CardType.WEAPON));
+                this.cards.add(new Card(stringArray[1], CardType.WEAPON));
                 continue;
             }
 		    
@@ -295,12 +292,12 @@ public class Board {
 
     public final void deal() {
         int n = 0;
-        Collections.shuffle(this.addToHand, this.startLoc);
+        Collections.shuffle(this.cards, this.random);
         this.solution = new Solution();
         for (Player player : this.players) {
             player.clearCards();
         }
-        for (Card object : this.addToHand) {
+        for (Card object : this.cards) {
             if (object.getCardType() == CardType.PERSON && this.solution.person == null) {
                 this.solution.person = object;
                 continue;
@@ -318,7 +315,7 @@ public class Board {
             object.setHoldingPlayer(m);
             n = (n + 1) % this.players.size();
         }
-        Collections.sort(this.addToHand);
+        Collections.sort(this.cards);
     }
     
     
@@ -355,11 +352,11 @@ public class Board {
 	}
 
     public final ArrayList getCards() {
-        return this.addToHand;
+        return this.cards;
     }
 
     public final Card getCard(String string) {
-        for (Card d : this.addToHand) {
+        for (Card d : this.cards) {
             if (!d.getCardName().equals(string)) continue;
             return d;
         }
@@ -385,5 +382,4 @@ public class Board {
     public final HumanPlayer getHuman() {
         return this.humanPlayer;
     }
-
 }

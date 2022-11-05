@@ -48,7 +48,6 @@ public class PlayerTest {
             assertTrue(testCard.getCardType() == CardType.PERSON || testCard.getCardType() == CardType.ROOM || testCard.getCardType() == CardType.WEAPON);
         }
 
-
         for (int i = 0; i < board.getNumPlayers(); i++) {
             Player testPlayer = board.getPlayer(i);
 
@@ -65,8 +64,6 @@ public class PlayerTest {
                 assertNotEquals(board.getHuman(), testPlayer);
             }
 
-
-
             // check that solution is not dealt to players
             for (int j = 0; j < testPlayer.getHand().size(); j++) {
                 assertFalse(testPlayer.getHand().get(j) == board.getSolution().person);
@@ -79,9 +76,6 @@ public class PlayerTest {
         assertNotNull(board.getSolution().person);
         assertNotNull(board.getSolution().room);
         assertNotNull(board.getSolution().weapon);
-
-
-
     }
 
 }
