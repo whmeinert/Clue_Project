@@ -31,11 +31,6 @@ public class PlayerCardTest {
     }
 
     @Test
-    public void cardsTest(){
-
-    }
-
-    @Test
     public void playerTest(){
         // Test that the expected number of players were loaded in
         assertEquals(6,board.getNumPlayers());

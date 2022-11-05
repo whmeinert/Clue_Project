@@ -16,7 +16,7 @@ public class Board {
     private HumanPlayer humanPlayer;
     private ArrayList<Player> players;
     private ArrayList<Card> cards;
-	Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	Map<Character, Room> roomMap = new HashMap<>();
     Random random = new Random();
 	
 	/*
@@ -79,7 +79,8 @@ public class Board {
 		        ++n;
 		    }
 		    
-		    char descriptor = '\u0000';
+		    char descriptor = '\u0000';  // set to null character
+
 		    // check if current line is a room
 		    if (stringArray[0].contentEquals("Room")) {
                 Card card = new Card(stringArray[1], CardType.ROOM);
@@ -98,8 +99,10 @@ public class Board {
 		        continue;
 		    }
 
+            // check if current line is a space
             if (stringArray[0].contentEquals("Player")) {
                 Player currPlayer;
+                // Check if current player is a human or computer
                 if (stringArray[2].contentEquals("human")) {
                     this.humanPlayer = new HumanPlayer(stringArray[1], Integer.parseInt(stringArray[3]), Integer.parseInt(stringArray[4]), stringArray[5]);
                     currPlayer = this.humanPlayer;
@@ -110,6 +113,8 @@ public class Board {
                 this.cards.add(new Card(stringArray[1], CardType.PERSON));
                 continue;
             }
+
+            // check if current line is a weapon
             if (stringArray[0].contentEquals("Weapon")) {
                 this.cards.add(new Card(stringArray[1], CardType.WEAPON));
                 continue;
@@ -292,27 +297,43 @@ public class Board {
 
     public final void deal() {
         int n = 0;
+
+        // Randomly shuffle cards
         Collections.shuffle(this.cards, this.random);
-        this.solution = new Solution();
+
+        this.solution = new Solution();  // initialize solution
+
+        // initialize card array for all players
         for (Player player : this.players) {
             player.clearCards();
         }
-        for (Card object : this.cards) {
-            if (object.getCardType() == CardType.PERSON && this.solution.person == null) {
-                this.solution.person = object;
+
+        // Give cards to players
+        for (Card card : this.cards) {
+            // Set first PERSON type card to solution if solution is not yet set
+            if (card.getCardType() == CardType.PERSON && this.solution.person == null) {
+                this.solution.person = card;
                 continue;
             }
-            if (object.getCardType() == CardType.ROOM && this.solution.room == null) {
-                this.solution.room = object;
+            // Set first ROOM type card to solution if solution is not yet set
+            if (card.getCardType() == CardType.ROOM && this.solution.room == null) {
+                this.solution.room = card;
                 continue;
             }
-            if (object.getCardType() == CardType.WEAPON && this.solution.weapon == null) {
-                this.solution.weapon = object;
+            // Set first WEAPON type card to solution if solution is not yet set
+            if (card.getCardType() == CardType.WEAPON && this.solution.weapon == null) {
+                this.solution.weapon = card;
                 continue;
             }
-            Player m = this.players.get(n);
-            m.addToHand(object);
-            object.setHoldingPlayer(m);
+
+            // get current player and give current card
+            Player player = this.players.get(n);
+            player.addToHand(card);
+
+            // set current player to be holder of current card
+            card.setHoldingPlayer(player);
+
+            // Increment so cards are randomly distributed
             n = (n + 1) % this.players.size();
         }
         Collections.sort(this.cards);
