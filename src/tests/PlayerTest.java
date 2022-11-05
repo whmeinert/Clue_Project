@@ -1,11 +1,16 @@
 package tests;
 
 import java.util.Objects;
-import java.util.Set;
 
 import clueGame.Board;
 import clueGame.Card;
 import clueGame.CardType;
+import clueGame.Player;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -39,23 +44,41 @@ public class PlayerTest {
 
         // Check that all cards are either a person, weapon, or room
         for (int i = 0; i < board.getCards().size(); i++) {
-            Card currCard = (Card) board.getCards().get(i);
-            assertTrue(currCard.getCardType() == CardType.PERSON || currCard.getCardType() == CardType.ROOM || currCard.getCardType() == CardType.WEAPON);
+            Card testCard = (Card) board.getCards().get(i);
+            assertTrue(testCard.getCardType() == CardType.PERSON || testCard.getCardType() == CardType.ROOM || testCard.getCardType() == CardType.WEAPON);
         }
 
-        // Check that the first player is the human and the rest are computers
+
         for (int i = 0; i < board.getNumPlayers(); i++) {
+            Player testPlayer = board.getPlayer(i);
+
+            // Check that the player is instantiated
+            assertNotNull(testPlayer.getName());
+            assertNotNull(testPlayer.getHand());
+
+            // Check that the first player is the human and the rest are computers
             if (i == 0) {
-                assertEquals(board.getHuman(), board.getPlayer(i));
-                assertTrue(Objects.equals(board.getPlayer(i).getName(), "Professor Plum"));
+                assertEquals(board.getHuman(), testPlayer);
+                assertTrue(Objects.equals(testPlayer.getName(), "Professor Plum"));
             }
             else {
-                assertNotEquals(board.getHuman(), board.getPlayer(i));
+                assertNotEquals(board.getHuman(), testPlayer);
+            }
+
+
+
+            // check that solution is not dealt to players
+            for (int j = 0; j < testPlayer.getHand().size(); j++) {
+                assertFalse(testPlayer.getHand().get(j) == board.getSolution().person);
+                assertFalse(testPlayer.getHand().get(j) == board.getSolution().room);
+                assertFalse(testPlayer.getHand().get(j) == board.getSolution().weapon);
             }
         }
 
-        // Check that the answer was generated
-        assertNotNull(board.getSolution());
+        // Check that the answer was dealt
+        assertNotNull(board.getSolution().person);
+        assertNotNull(board.getSolution().room);
+        assertNotNull(board.getSolution().weapon);
 
 
 
