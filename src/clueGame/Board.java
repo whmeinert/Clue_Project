@@ -351,7 +351,7 @@ public class Board {
 		return this.grid[i][j].getAdjList();
 	}
 
-    public final ArrayList getCards() {
+    public final ArrayList<Card> getCards() {
         return this.cards;
     }
 
@@ -363,7 +363,7 @@ public class Board {
         return null;
     }
 
-    public final ArrayList getPlayers() {
+    public final ArrayList<Player> getPlayers() {
         return this.players;
     }
 

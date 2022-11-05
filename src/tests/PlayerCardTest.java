@@ -1,5 +1,6 @@
 package tests;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import clueGame.Board;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
-public class PlayerTest {
+public class PlayerCardTest {
     private static Board board;
 
     @BeforeAll
@@ -35,18 +36,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void playerAndCardTest(){
+    public void playerTest(){
         // Test that the expected number of players were loaded in
         assertEquals(6,board.getNumPlayers());
-
-        // Test that the expected number of cards were loaded in
-        assertEquals(21, board.getCards().size());
-
-        // Check that all cards are either a person, weapon, or room
-        for (int i = 0; i < board.getCards().size(); i++) {
-            Card testCard = (Card) board.getCards().get(i);
-            assertTrue(testCard.getCardType() == CardType.PERSON || testCard.getCardType() == CardType.ROOM || testCard.getCardType() == CardType.WEAPON);
-        }
 
         for (int i = 0; i < board.getNumPlayers(); i++) {
             Player testPlayer = board.getPlayer(i);
@@ -76,6 +68,33 @@ public class PlayerTest {
         assertNotNull(board.getSolution().person);
         assertNotNull(board.getSolution().room);
         assertNotNull(board.getSolution().weapon);
+    }
+
+    @Test
+    public void cardTest(){
+        // Test that the expected number of cards were loaded in
+        assertEquals(21, board.getCards().size());
+
+        // Check that all cards are either a person, weapon, or room
+        for (int i = 0; i < board.getCards().size(); i++) {
+            Card testCard = (Card) board.getCards().get(i);
+            assertTrue(testCard.getCardType() == CardType.PERSON || testCard.getCardType() == CardType.ROOM || testCard.getCardType() == CardType.WEAPON);
+        }
+
+        // Check that no card is dealt twice
+        ArrayList<Card> dealtCards = new ArrayList<>();
+        for (int i = 0; i < board.getNumPlayers(); i++) {
+            Player testPlayer = board.getPlayer(i);
+            dealtCards.addAll(testPlayer.getHand());
+        }
+        dealtCards.add(board.getSolution().person);
+        dealtCards.add(board.getSolution().room);
+        dealtCards.add(board.getSolution().weapon);
+        for (int i = 1; i < dealtCards.size(); i++) {
+            for (int j = i; j < dealtCards.size(); j++) {
+                assertFalse(dealtCards.get(i-1) == dealtCards.get(j));
+            }
+        }
     }
 
 }
