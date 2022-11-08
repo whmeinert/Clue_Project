@@ -118,7 +118,7 @@ public class SuggestionTest {
 
     @Test
     public void computerSuggestionTest(){
-        board.getPlayer(2).setLoc(board.getCell(2,3),false);
+        board.getPlayer(2).setLoc(board.getCell(2,3));
         ComputerPlayer testComp = (ComputerPlayer)board.getPlayer(2);
         Solution compSol = testComp.createSuggestion(board.getRoom(board.getCell(2,3)));
 
@@ -170,11 +170,11 @@ public class SuggestionTest {
         board.calcTargets(board.getCell(9, 12), 1);
         Set<BoardCell> targets = board.getTargets();
         ComputerPlayer testPlayer = (ComputerPlayer)testPlayer1;
-        testPlayer.setLoc(board.getCell(9,12), false);
+        testPlayer.setLoc(board.getCell(9,12));
         //Check that if room has not been seen computer enters room
         assertEquals(board.getCell(4,12), testPlayer.selectTarget(targets));
 
-        testPlayer.setLoc(board.getCell(9,12), false);
+        testPlayer.setLoc(board.getCell(9,12));
         testPlayer.addToHand(board.getCard("Living Room"));
         //Check that if room has been seen computer moves
         assertNotEquals(board.getCell(9,12), testPlayer.selectTarget(targets));
@@ -185,7 +185,7 @@ public class SuggestionTest {
         targets.add(board.getCell(10,18));
         targets.add(board.getCell(10,16));
         targets.add(board.getCell(11,17));
-        testPlayer1.setLoc(board.getCell(10,17),false);
+        testPlayer1.setLoc(board.getCell(10,17));
         assertNotEquals(board.getCell(10,17), testPlayer.selectTarget(targets));
     }
 

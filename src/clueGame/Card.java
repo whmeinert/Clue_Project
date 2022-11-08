@@ -31,8 +31,8 @@ public class Card implements Comparable{
         if (!(object instanceof Card)) {
             return false;
         }
-        Card d = (Card)object;
-        return this.cardName.equals(d.cardName) && this.cardType == d.cardType;
+        Card card = (Card)object;
+        return this.cardName.equals(card.cardName) && this.cardType == card.cardType;
     }
 
     @Override

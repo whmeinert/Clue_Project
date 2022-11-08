@@ -339,19 +339,20 @@ public class Board {
         Collections.sort(this.cards);
     }
 
-    public final boolean checkAccusation(Solution o) {
-        return o.person.equals(this.solution.person) && o.weapon.equals(this.solution.weapon) && o.room.equals(this.solution.room);
+    public final boolean checkAccusation(Solution solution) {
+        return solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room);
     }
 
-    public final Card handleSuggestion(Solution o, Player m) {
-        Player m2;
-        Card d;
-        int n = this.players.indexOf(m);
+    public final Card handleSuggestion(Solution solution, Player currPlayer) {
+        Player otherPlayer;
+        Card card;
+        int n = this.players.indexOf(currPlayer);
+        // loop over every player and check if other players have a card that disproves the current players suggestion
         do {
-            if ((m2 = (Player)this.players.get(n = (n + 1) % this.players.size())) != m) continue;
+            if ((otherPlayer = (Player)this.players.get(n = (n + 1) % this.players.size())) != currPlayer) continue;
             return null;
-        } while ((d = m2.disproveSuggestion(o)) == null);
-        return d;
+        } while ((card = otherPlayer.disproveSuggestion(solution)) == null);
+        return card;
     }
     
     
@@ -418,10 +419,10 @@ public class Board {
         return this.humanPlayer;
     }
 
-    public final void setSolution(Card d, Card d2, Card d3) {
-        this.solution.person = d;
-        this.solution.room = d2;
-        this.solution.weapon = d3;
+    public final void setSolution(Card person, Card room, Card weapon) {
+        this.solution.person = person;
+        this.solution.room = room;
+        this.solution.weapon = weapon;
     }
 
     public final void setPlayers(ArrayList players) {

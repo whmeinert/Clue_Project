@@ -7,28 +7,28 @@ public class ComputerPlayer extends Player{
         super(name, row, col, color);
     }
 
-    public final BoardCell selectTarget(Set<BoardCell> set) {
+    public final BoardCell selectTarget(Set<BoardCell> targets) {
         ArrayList<BoardCell> arrayList = new ArrayList<>();
-        if (set.size() == 0) {
+        if (targets.size() == 0) {
             return this.board.getCell(this.row, this.col);
         }
         int n = 1001;
-        for (BoardCell c : set) {
-            this.I(c);
-            n = Math.min(n, c.getScore());
+        for (BoardCell cell : targets) {
+            this.checkCell(cell);
+            n = Math.min(n, cell.getScore());
         }
-        for (BoardCell c : set) {
-            if (c.getScore() != n) continue;
-            arrayList.add(c);
+        for (BoardCell cell : targets) {
+            if (cell.getScore() != n) continue;
+            arrayList.add(cell);
         }
-        int n2 = this.B.nextInt(arrayList.size());
+        int n2 = this.random.nextInt(arrayList.size());
         return arrayList.get(n2);
     }
 
-    private void I(BoardCell c) {
+    private void checkCell(BoardCell c) {
         int n = 1000;
         if (c.isRoom()) {
-            if (this.D.contains(c.getRoom().getCard())) {
+            if (this.seenCards.contains(c.getRoom().getCard())) {
                 c.setScore(50);
             } else {
                 c.setScore(0);
@@ -42,7 +42,7 @@ public class ComputerPlayer extends Player{
                 BoardCell c2 = this.board.getCell(n2, n3);
                 if (c2.isDoorway()) {
                     int n4 = Math.abs(n2 - c.getRow()) + Math.abs(n3 - c.getColumn());
-                    if (this.D.contains(c2.getToRoom().getCard())) {
+                    if (this.seenCards.contains(c2.getToRoom().getCard())) {
                         n4 += 50;
                     }
                     n = Math.min(n, n4);
@@ -54,23 +54,23 @@ public class ComputerPlayer extends Player{
         c.setScore(n);
     }
 
-    public final Solution createSuggestion(Room n) {
+    public final Solution createSuggestion(Room room) {
         Solution newSuggestion = new Solution();
-        newSuggestion.room = n.getCard();
-        ArrayList<Card> arrayList = new ArrayList<Card>();
-        ArrayList<Card> arrayList2 = new ArrayList<Card>();
-        for (Card d : this.board.getCards()) {
-            if (d.getCardType() == clueGame.CardType.PERSON && !this.D.contains(d)) {
-                arrayList.add(d);
+        newSuggestion.room = room.getCard();
+        ArrayList<Card> personList = new ArrayList<Card>();
+        ArrayList<Card> weaponList = new ArrayList<Card>();
+        for (Card card : this.board.getCards()) {
+            if (card.getCardType() == clueGame.CardType.PERSON && !this.seenCards.contains(card)) {
+                personList.add(card);
                 continue;
             }
-            if (d.getCardType() != clueGame.CardType.WEAPON || this.D.contains(d)) { continue; }
-            arrayList2.add(d);
+            if (card.getCardType() != clueGame.CardType.WEAPON || this.seenCards.contains(card)) { continue; }
+            weaponList.add(card);
         }
-        int n2 = this.B.nextInt(arrayList.size());
-        newSuggestion.person = (Card)arrayList.get(n2);
-        n2 = this.B.nextInt(arrayList2.size());
-        newSuggestion.weapon = (Card)arrayList2.get(n2);
+        int n2 = this.random.nextInt(personList.size());
+        newSuggestion.person = (Card)personList.get(n2);
+        n2 = this.random.nextInt(weaponList.size());
+        newSuggestion.weapon = (Card)weaponList.get(n2);
         return newSuggestion;
     }
 }

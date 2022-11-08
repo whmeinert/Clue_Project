@@ -1,6 +1,5 @@
 package clueGame;
 
-import java.awt.*;
 import java.util.*;
 
 public abstract class Player {
@@ -10,9 +9,8 @@ public abstract class Player {
     protected Board board;
     private final String color;
     private ArrayList<Card> cards;
-    protected Random B;
-    protected Set<Card> D;
-    protected boolean get;
+    protected Random random;
+    protected Set<Card> seenCards;
 
     public Player(String name, int row, int col, String color) {
         this.name = name;
@@ -21,8 +19,8 @@ public abstract class Player {
         this.color = color;
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();
-        this.D = new HashSet();
-        this.B = Board.getInstance().random;
+        this.seenCards = new HashSet();
+        this.random = Board.getInstance().random;
     }
 
     public final Card disproveSuggestion(Solution o) {
@@ -34,24 +32,23 @@ public abstract class Player {
         }
         d3 = null;
         if (arrayList.size() > 0) {
-            int n = this.B.nextInt(arrayList.size());
+            int n = this.random.nextInt(arrayList.size());
             d3 = (Card)arrayList.get(n);
         }
         return d3;
     }
 
-    public final void setLoc(BoardCell c, boolean bl) {
-        this.get = false;
-        if (c != this.board.getCell(this.row, this.col)) {
+    public final void setLoc(BoardCell cell) {
+        if (cell != this.board.getCell(this.row, this.col)) {
             this.board.getCell(this.row, this.col).setOccupied(false);
-            this.row = c.getRow();
-            this.col = c.getColumn();
-            c.setOccupied(true);
+            this.row = cell.getRow();
+            this.col = cell.getColumn();
+            cell.setOccupied(true);
         }
     }
 
     public final void updateSeen(Card d) {
-        this.D.add(d);
+        this.seenCards.add(d);
     }
 
     public final void addToHand(Card d) {
@@ -76,6 +73,6 @@ public abstract class Player {
     }
 
     public final Set<Card> getSeen() {
-        return this.D;
+        return this.seenCards;
     }
 }
