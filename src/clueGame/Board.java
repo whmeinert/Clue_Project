@@ -364,7 +364,6 @@ public class Board {
 	public void setConfigFiles(String csvFile, String txtFile) {
 		this.layoutConfigFile = csvFile;
 		this.setupConfigFile = txtFile;
-		
 	}
 	
 	public final Room getRoom(char label) {
@@ -417,5 +416,11 @@ public class Board {
 
     public final HumanPlayer getHuman() {
         return this.humanPlayer;
+    }
+
+    public final void setSolution(Card d, Card d2, Card d3) {
+        this.solution.person = d;
+        this.solution.room = d2;
+        this.solution.weapon = d3;
     }
 }

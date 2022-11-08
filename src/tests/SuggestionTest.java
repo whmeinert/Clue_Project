@@ -32,6 +32,27 @@ public class SuggestionTest {
         board.initialize();
     }
 
+    @Test
+    public void accusationTest(){
+        // Check correct solution
+        board.setSolution(board.getCard("Professor Plum"), board.getCard("Office"), board.getCard("Revolver"));
+        Solution testSolution = new Solution(board.getCard("Professor Plum"), board.getCard("Office"), board.getCard("Revolver"));
+        assertTrue(board.checkAccusation(testSolution));
+
+        // Check wrong person
+        board.setSolution(board.getCard("Mrs. White"), board.getCard("Office"), board.getCard("Revolver"));
+        assertFalse(board.checkAccusation(testSolution));
+
+        // Check wrong room
+        board.setSolution(board.getCard("Professor Plum"), board.getCard("Kitchen"), board.getCard("Revolver"));
+        assertFalse(board.checkAccusation(testSolution));
+
+        // Check wrong weapon
+        board.setSolution(board.getCard("Professor Plum"), board.getCard("Office"), board.getCard("Rope"));
+        assertFalse(board.checkAccusation(testSolution));
+    }
+
+
 
     @Test
     public void computerSuggestionTest(){
