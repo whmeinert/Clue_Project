@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class SuggestionTest {
@@ -15,9 +17,16 @@ public class SuggestionTest {
     private static Card Dagger;
     private static Card LeadPipe;
     private static Card Revolver;
+    private static Player testPlayer1;
+    private static Player testPlayer2;
+    private static Player testPlayer3;
+
 
     @BeforeEach
     public void setUp() {
+        testPlayer1 = new ComputerPlayer("Rob", 0, 0, "Black");
+        testPlayer2 = new ComputerPlayer("Robberto", 0, 0, "Black");
+        testPlayer3 = new ComputerPlayer("Robbie", 0, 0, "Black");
         Wrench = new Card("Wrench", CardType.WEAPON);
         Candlestick = new Card("Candlestick", CardType.WEAPON);
         Rope = new Card("Rope", CardType.WEAPON);
@@ -55,19 +64,54 @@ public class SuggestionTest {
     @Test
     public void disproveSuggestionTest(){
         Solution testSolution = new Solution(board.getCard("Professor Plum"), board.getCard("Office"), board.getCard("Revolver"));
-        ComputerPlayer testPlayer = new ComputerPlayer("Rob", 0, 0, "Black");
-        testPlayer.addToHand(board.getCard("Professor Plum"));
+        testPlayer1.addToHand(board.getCard("Professor Plum"));
 
         // check if card is returned if one card in hand matches
-        assertEquals(board.getCard("Professor Plum"), testPlayer.disproveSuggestion(testSolution));
+        assertEquals(board.getCard("Professor Plum"), testPlayer1.disproveSuggestion(testSolution));
 
         // Check if card is returned if more than one card in hand matches
-        testPlayer.addToHand(board.getCard("Office"));
-        assertNotNull(testPlayer.disproveSuggestion(testSolution));
+        testPlayer1.addToHand(board.getCard("Office"));
+        assertNotNull(testPlayer1.disproveSuggestion(testSolution));
 
         // Check that no cards are returned if no cards in hand match
         testSolution = new Solution(board.getCard("Mrs. White"), board.getCard("Kitchen"), board.getCard("Revolver"));
-        assertNull(testPlayer.disproveSuggestion(testSolution));
+        assertNull(testPlayer1.disproveSuggestion(testSolution));
+    }
+
+    @Test
+    public void handleSuggestionTest(){
+        Card testPerson = new Card("TestP", CardType.PERSON);
+        Card testWeapon = new Card("TestW", CardType.WEAPON);
+        Card testRoom = new Card("TestR", CardType.ROOM);
+        Solution testSolution = new Solution(testPerson, testRoom, testWeapon);
+
+        // Test no players can disprove
+        for (Player player: board.getPlayers()){
+            assertNull(board.handleSuggestion(testSolution, player));
+        }
+
+        // Test Only suggester can disprove
+        testPlayer1.addToHand(testRoom);
+        ArrayList<Player> testPlayers = new ArrayList<>();
+        testPlayers.add(testPlayer1);
+        board.setPlayers(testPlayers);
+        assertNull(board.handleSuggestion(testSolution, testPlayer1));
+
+        // Check that if 2 and 3 both can disprove, 2 disproves
+        testPlayer2.addToHand(testWeapon);
+        testPlayer3.addToHand(testPerson);
+        testPlayers.add(testPlayer2);
+        testPlayers.add(testPlayer3);
+        board.setPlayers(testPlayers);
+        assertEquals(testPlayer2.getHand().get(0), board.handleSuggestion(testSolution, testPlayer1));
+
+        // Check that human can disprove suggestions
+        testSolution = board.getSolution();
+        HumanPlayer testHuman = new HumanPlayer("Hugh", 0,0,"white");
+        testHuman.addToHand(testSolution.room);
+        testPlayers.add(testHuman);
+        board.setPlayers(testPlayers);
+        assertEquals(testHuman.getHand().get(0), board.handleSuggestion(testSolution, testPlayer1));
     }
 
     @Test

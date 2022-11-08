@@ -27,7 +27,7 @@ public abstract class Player {
 
     public final Card disproveSuggestion(Solution o) {
         Card d3;
-        ArrayList<Card> arrayList = new ArrayList<Card>();
+        ArrayList<Card> arrayList = new ArrayList<>();
         for (Card d2 : this.cards) {
             if (!d2.equals(o.person) && !d2.equals(o.weapon) && !d2.equals(o.room)) continue;
             arrayList.add(d2);

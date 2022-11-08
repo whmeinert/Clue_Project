@@ -398,7 +398,7 @@ public class Board {
         return null;
     }
 
-    public final ArrayList getPlayers() {
+    public final ArrayList<Player> getPlayers() {
         return this.players;
     }
 
@@ -422,5 +422,9 @@ public class Board {
         this.solution.person = d;
         this.solution.room = d2;
         this.solution.weapon = d3;
+    }
+
+    public final void setPlayers(ArrayList players) {
+        this.players = players;
     }
 }

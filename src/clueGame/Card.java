@@ -1,5 +1,7 @@
 package clueGame;
 
+import clueGame.CardType;
+
 public class Card implements Comparable{
     private String cardName;
     private CardType cardType;
@@ -22,8 +24,21 @@ public class Card implements Comparable{
         return this.cardName;
     }
 
+    public final boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Card)) {
+            return false;
+        }
+        Card d = (Card)object;
+        return this.cardName.equals(d.cardName) && this.cardType == d.cardType;
+    }
+
     @Override
     public int compareTo(Object card) {
         return 0;
     }
+
+
 }
