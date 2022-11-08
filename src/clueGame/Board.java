@@ -399,12 +399,12 @@ public class Board {
         return null;
     }
 
-    public final ArrayList<Player> getPlayers() {
+    public final ArrayList getPlayers() {
         return this.players;
     }
 
     public final Player getPlayer(int n) {
-        return (Player)this.players.get(n);
+        return this.players.get(n);
     }
 
     public final int getNumPlayers() {

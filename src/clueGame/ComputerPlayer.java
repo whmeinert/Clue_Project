@@ -23,7 +23,7 @@ public class ComputerPlayer extends Player{
             arrayList.add(c);
         }
         int n2 = this.B.nextInt(arrayList.size());
-        return (BoardCell)arrayList.get(n2);
+        return arrayList.get(n2);
     }
 
     private void I(BoardCell c) {
@@ -56,8 +56,8 @@ public class ComputerPlayer extends Player{
     }
 
     public final Solution createSuggestion(Room n) {
-        Solution o = new Solution();
-        o.room = n.getCard();
+        Solution newSuggestion = new Solution();
+        newSuggestion.room = n.getCard();
         ArrayList<Card> arrayList = new ArrayList<Card>();
         ArrayList<Card> arrayList2 = new ArrayList<Card>();
         for (Card d : this.board.getCards()) {
@@ -65,13 +65,13 @@ public class ComputerPlayer extends Player{
                 arrayList.add(d);
                 continue;
             }
-            if (d.getCardType() != clueGame.CardType.WEAPON || this.D.contains(d)) continue;
+            if (d.getCardType() != clueGame.CardType.WEAPON || this.D.contains(d)) { continue; }
             arrayList2.add(d);
         }
         int n2 = this.B.nextInt(arrayList.size());
-        o.person = (Card)arrayList.get(n2);
+        newSuggestion.person = (Card)arrayList.get(n2);
         n2 = this.B.nextInt(arrayList2.size());
-        o.weapon = (Card)arrayList2.get(n2);
-        return o;
+        newSuggestion.weapon = (Card)arrayList2.get(n2);
+        return newSuggestion;
     }
 }

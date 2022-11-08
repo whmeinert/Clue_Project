@@ -11,8 +11,9 @@ public abstract class Player {
     private final String color;
     private ArrayList<Card> cards;
     protected Random B;
-    protected Set D;
+    protected Set<Card> D;
     private ArrayList<Card> drawOval;
+    protected boolean get;
 
     public Player(String name, int row, int col, String color) {
         this.name = name;
@@ -22,6 +23,8 @@ public abstract class Player {
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();
         this.drawOval = new ArrayList();
+        this.D = new HashSet();
+        this.B = Board.getInstance().random;
     }
 
     public final Card disproveSuggestion(Solution o) {
@@ -39,8 +42,23 @@ public abstract class Player {
         return d3;
     }
 
+    public final void setLoc(BoardCell c, boolean bl) {
+        this.get = false;
+        if (c != this.board.getCell(this.row, this.col)) {
+            this.board.getCell(this.row, this.col).setOccupied(false);
+            this.row = c.getRow();
+            this.col = c.getColumn();
+            c.setOccupied(true);
+        }
+    }
+
+    public final void updateSeen(Card d) {
+        this.D.add(d);
+    }
+
     public final void addToHand(Card d) {
         this.cards.add(d);
+        updateSeen(d);
     }
 
     public final String getName() {
@@ -57,5 +75,9 @@ public abstract class Player {
 
     public final void clearCards() {
         this.cards = new ArrayList<>();
+    }
+
+    public final Set<Card> getSeen() {
+        return this.D;
     }
 }
