@@ -14,6 +14,8 @@ public class BoardCell {
 	private Boolean roomCenter = false;
 	private char secretPassage;
 	Room room;
+	private Room add;
+	private int score;
 
 	
 	// initializes cells variables and finds what the direction, label, center, or secret passage is
@@ -113,6 +115,10 @@ public class BoardCell {
 		return this.room;
 	}
 
+	public final Room getToRoom() {
+		return this.add;
+	}
+
 	public boolean isUnused() {
 		return this.location == 'X';
 	}
@@ -123,5 +129,13 @@ public class BoardCell {
 
 	public final int getRow() {
 		return this.row;
+	}
+
+	public final void setScore(int n) {
+		this.score = n;
+	}
+
+	public final int getScore() {
+		return this.score;
 	}
 }

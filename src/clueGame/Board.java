@@ -338,6 +338,21 @@ public class Board {
         }
         Collections.sort(this.cards);
     }
+
+    public final boolean checkAccusation(Solution o) {
+        return o.person.equals(this.solution.person) && o.weapon.equals(this.solution.weapon) && o.room.equals(this.solution.room);
+    }
+
+    public final Card handleSuggestion(Solution o, Player m) {
+        Player m2;
+        Card d;
+        int n = this.players.indexOf(m);
+        do {
+            if ((m2 = (Player)this.players.get(n = (n + 1) % this.players.size())) != m) continue;
+            return null;
+        } while ((d = m2.disproveSuggestion(o)) == null);
+        return d;
+    }
     
     
     // Getters and setters for private variables
