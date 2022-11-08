@@ -116,7 +116,7 @@ public class BoardCell {
 	}
 
 	public final Room getToRoom() {
-		return this.add;
+		return this.room;
 	}
 
 	public boolean isUnused() {

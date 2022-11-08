@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -159,8 +161,32 @@ public class SuggestionTest {
                 compSol.weapon = card;
             }
         }
-        assertEquals(compSol.weapon.getCardName(), compSol.weapon.getCardName());
-        assertEquals(compSol.person.getCardName(), compSol.person.getCardName());
+        assertEquals(compSol.weapon, compSol.weapon);
+        assertEquals(compSol.person, compSol.person);
+    }
+
+    @Test
+    public void selectTargetsTest(){
+        board.calcTargets(board.getCell(9, 12), 1);
+        Set<BoardCell> targets = board.getTargets();
+        ComputerPlayer testPlayer = (ComputerPlayer)testPlayer1;
+        testPlayer.setLoc(board.getCell(9,12), false);
+        //Check that if room has not been seen computer enters room
+        assertEquals(board.getCell(4,12), testPlayer.selectTarget(targets));
+
+        testPlayer.setLoc(board.getCell(9,12), false);
+        testPlayer.addToHand(board.getCard("Living Room"));
+        //Check that if room has been seen computer moves
+        assertNotEquals(board.getCell(9,12), testPlayer.selectTarget(targets));
+
+        // Check that if there are no rooms then select any
+        targets = new HashSet<>();
+        targets.add(board.getCell(9,17));
+        targets.add(board.getCell(10,18));
+        targets.add(board.getCell(10,16));
+        targets.add(board.getCell(11,17));
+        testPlayer1.setLoc(board.getCell(10,17),false);
+        assertNotEquals(board.getCell(10,17), testPlayer.selectTarget(targets));
     }
 
 }

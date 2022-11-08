@@ -3,13 +3,12 @@ package clueGame;
 import java.util.*;
 
 public class ComputerPlayer extends Player{
-    private boolean I = false;
     public ComputerPlayer(String name, int row, int col, String color) {
         super(name, row, col, color);
     }
 
     public final BoardCell selectTarget(Set<BoardCell> set) {
-        ArrayList<BoardCell> arrayList = new ArrayList<BoardCell>();
+        ArrayList<BoardCell> arrayList = new ArrayList<>();
         if (set.size() == 0) {
             return this.board.getCell(this.row, this.col);
         }
