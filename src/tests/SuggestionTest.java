@@ -52,7 +52,23 @@ public class SuggestionTest {
         assertFalse(board.checkAccusation(testSolution));
     }
 
+    @Test
+    public void disproveSuggestionTest(){
+        Solution testSolution = new Solution(board.getCard("Professor Plum"), board.getCard("Office"), board.getCard("Revolver"));
+        ComputerPlayer testPlayer = new ComputerPlayer("Rob", 0, 0, "Black");
+        testPlayer.addToHand(board.getCard("Professor Plum"));
 
+        // check if card is returned if one card in hand matches
+        assertEquals(board.getCard("Professor Plum"), testPlayer.disproveSuggestion(testSolution));
+
+        // Check if card is returned if more than one card in hand matches
+        testPlayer.addToHand(board.getCard("Office"));
+        assertNotNull(testPlayer.disproveSuggestion(testSolution));
+
+        // Check that no cards are returned if no cards in hand match
+        testSolution = new Solution(board.getCard("Mrs. White"), board.getCard("Kitchen"), board.getCard("Revolver"));
+        assertNull(testPlayer.disproveSuggestion(testSolution));
+    }
 
     @Test
     public void computerSuggestionTest(){

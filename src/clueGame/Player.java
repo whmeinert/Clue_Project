@@ -12,7 +12,6 @@ public abstract class Player {
     private ArrayList<Card> cards;
     protected Random B;
     protected Set<Card> D;
-    private ArrayList<Card> drawOval;
     protected boolean get;
 
     public Player(String name, int row, int col, String color) {
@@ -22,7 +21,6 @@ public abstract class Player {
         this.color = color;
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();
-        this.drawOval = new ArrayList();
         this.D = new HashSet();
         this.B = Board.getInstance().random;
     }
@@ -30,7 +28,7 @@ public abstract class Player {
     public final Card disproveSuggestion(Solution o) {
         Card d3;
         ArrayList<Card> arrayList = new ArrayList<Card>();
-        for (Card d2 : this.drawOval) {
+        for (Card d2 : this.cards) {
             if (!d2.equals(o.person) && !d2.equals(o.weapon) && !d2.equals(o.room)) continue;
             arrayList.add(d2);
         }
