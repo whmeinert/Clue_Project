@@ -22,6 +22,7 @@ public class GameControlPanel extends JPanel {
         this.add(this.getLowerPanels());
     }
 
+    // Creates and sets the panels in the upper half of the main panel
     private JPanel getUpperPanels() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(1, 4));
@@ -34,6 +35,7 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
+    // Creates the panel that displays the current player
     private JPanel getPlayer() {
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel("Whose turn?"));
@@ -43,6 +45,7 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
+    // Creates and sets the panels in the lower half of the main panel
     private JPanel getLowerPanels() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(0, 2));
@@ -51,6 +54,7 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
+    // Creates the panel that displays the current roll
     private JPanel getRoll() {
         JPanel jPanel = new JPanel();
         jPanel.add(new JLabel("Roll:"));
@@ -60,6 +64,7 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
+    // Creates the panel that displays the guess
     private JPanel getGuess() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(1, 0));
@@ -70,6 +75,7 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
+    // Creates the panel that displays the guess result
     private JPanel getResult() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(1, 0));
@@ -80,17 +86,20 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
-    public final void setTurn(Player player, int n) {
+    // Sets the text in the field to be the current player and their associated color
+    public final void setPlayer(Player player, int n) {
         this.currPlayerField.setText(player.getName());
         this.currPlayerField.setBackground(player.getColor());
         this.rollField.setText(String.valueOf(n));
     }
 
+    // Sets the text in the field to be the current guess and the players associated color
     public final void setGuess(String string, Color color) {
         this.guessField.setBackground(color);
         this.guessField.setText(string);
     }
 
+    // Sets the text in the field to be the current guess result
     public final void setGuessResult(String string, Color color) {
         this.guessResultField.setBackground(color);
         this.guessResultField.setText(string);
@@ -103,7 +112,9 @@ public class GameControlPanel extends JPanel {
         jFrame.setSize(750, 180);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
-        a.setTurn(new ComputerPlayer("Professor Plum", 0, 0, "purple"), 5);
+
+        // Test panel setters and getters
+        a.setPlayer(new ComputerPlayer("Professor Plum", 0, 0, "purple"), 5);
         a.setGuess("I have no guess!", Color.magenta);
         a.setGuessResult("So you have nothing?", null);
     }
