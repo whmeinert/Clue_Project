@@ -19,7 +19,7 @@ public class GameControlPanel extends JPanel {
         this.repaint = z;
         this.setLayout(new GridLayout(2, 0));
         this.add(this.add());
-        //this.add(this.getBkColor());
+        this.add(this.getBkColor());
     }
 
     private JPanel add() {
@@ -45,9 +45,9 @@ public class GameControlPanel extends JPanel {
 
     private JPanel getBkColor() {
         JPanel jPanel = new JPanel();
-        //jPanel.setLayout(new GridLayout(0, 2));
-        //jPanel.add(this.getGuess());
-        //jPanel.add(this.getResult());
+        jPanel.setLayout(new GridLayout(0, 2));
+        jPanel.add(this.getGuess());
+        jPanel.add(this.getResult());
         return jPanel;
     }
 
