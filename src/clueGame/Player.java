@@ -1,22 +1,45 @@
 package clueGame;
 
 import java.util.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 public abstract class Player {
     private final String name;
     protected int row;
     protected int col;
     protected Board board;
-    private final String color;
+    private Color color;
+    private Color contentEquals;
     private ArrayList<Card> cards;
     protected Random random;
     protected Set<Card> seenCards;
 
-    public Player(String name, int row, int col, String color) {
+    protected boolean get;
+
+    public Player(String name, int row, int col, String colorStr) {
         this.name = name;
         this.row = row;
         this.col = col;
-        this.color = color;
+        if (colorStr.contentEquals("red")) {
+            this.color = new Color(255, 0, 0);
+            this.contentEquals = new Color(255, 128, 128);
+        } else if (colorStr.contentEquals("orange")) {
+            this.color = new Color(255, 196, 0);
+            this.contentEquals = new Color(255, 221, 56, 255);
+        } else if (colorStr.contentEquals("green")) {
+            this.color = new Color(0, 255, 0);
+            this.contentEquals = new Color(106, 255, 156);
+        } else if (colorStr.contentEquals("blue")) {
+            this.color = new Color(0, 153, 255);
+            this.contentEquals = new Color(153, 214, 255);
+        } else if (colorStr.contentEquals("white")) {
+            this.color = new Color(232, 232, 232);
+            this.contentEquals = new Color(255, 255, 255);
+        } else if (colorStr.contentEquals("purple")) {
+            this.color = new Color(219, 0, 253);
+            this.contentEquals = new Color(230, 179, 255);
+        }
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();
         this.seenCards = new HashSet();
@@ -60,7 +83,7 @@ public abstract class Player {
         return this.name;
     }
 
-    public final String getColor() {
+    public final Color getColor() {
         return this.color;
     }
 
