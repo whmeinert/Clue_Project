@@ -25,8 +25,8 @@ public class GameControlPanel extends JPanel {
     private JPanel add() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new GridLayout(1, 4));
-        //jPanel.add(this.addActionListener());
-        //jPanel.add(this.getRoll());
+        jPanel.add(this.addActionListener());
+        jPanel.add(this.getRoll());
         this.add = new JButton("Make Accusation");
         jPanel.add(this.add);
         this.addActionListener = new JButton("NEXT!");
@@ -104,7 +104,7 @@ public class GameControlPanel extends JPanel {
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
         //a.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
-        //a.setGuess("I have no guess!", Color.orange);
-        //a.setGuessResult("So you have nothing?", null);
+        a.setGuess("I have no guess!", Color.orange);
+        a.setGuessResult("So you have nothing?", null);
     }
 }
