@@ -1,7 +1,6 @@
 package clueGame;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -18,7 +17,7 @@ public class KnownCardsPanel extends JPanel {
         this.board = board;
         this.setLayout(new GridLayout(3, 1));
         TitledBorder titledBorder = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(0), "Known Cards");
-        titledBorder.setTitleJustification(2);
+        titledBorder.setTitleJustification(TitledBorder.CENTER);
         this.setBorder(titledBorder);
 
         // Create panels for People, Room, and Weapon
