@@ -10,6 +10,7 @@ public abstract class Player {
     protected int col;
     protected Board board;
     private Color color;
+    private Color backColor;
     private ArrayList<Card> cards;
     protected Random random;
     protected Set<Card> seenCards;
@@ -22,16 +23,22 @@ public abstract class Player {
         this.col = col;
         if (colorStr.contentEquals("red")) {
             this.color = new Color(255, 0, 0);
+            this.backColor = new Color(253, 133, 133);
         } else if (colorStr.contentEquals("orange")) {
-            this.color = new Color(255, 196, 0);
+            this.color = new Color(252, 202, 2);
+            this.backColor = new Color(252, 223, 109);
         } else if (colorStr.contentEquals("green")) {
-            this.color = new Color(0, 255, 0);
+            this.color = new Color(1, 213, 72);
+            this.backColor = new Color(104, 252, 154);
         } else if (colorStr.contentEquals("blue")) {
-            this.color = new Color(0, 153, 255);
+            this.color = new Color(0, 150, 246);
+            this.backColor = new Color(151, 209, 248);
         } else if (colorStr.contentEquals("white")) {
-            this.color = new Color(232, 232, 232);
+            this.color = new Color(239, 239, 239);
+            this.backColor = new Color(255, 255, 255);
         } else if (colorStr.contentEquals("purple")) {
-            this.color = new Color(219, 0, 253);
+            this.color = new Color(227, 3, 183);
+            this.backColor = new Color(221, 155, 243);
         }
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();
@@ -78,6 +85,9 @@ public abstract class Player {
 
     public final Color getColor() {
         return this.color;
+    }
+    public final Color getBackColor() {
+        return this.backColor;
     }
 
     public final ArrayList<Card> getHand() {

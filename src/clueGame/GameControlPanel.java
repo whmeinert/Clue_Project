@@ -89,7 +89,7 @@ public class GameControlPanel extends JPanel {
     // Sets the text in the field to be the current player and their associated color
     public final void setPlayer(Player player, int n) {
         this.currPlayerField.setText(player.getName());
-        this.currPlayerField.setBackground(player.getColor());
+        this.currPlayerField.setBackground(player.getBackColor());
         this.rollField.setText(String.valueOf(n));
     }
 
@@ -115,7 +115,7 @@ public class GameControlPanel extends JPanel {
 
         // Test panel setters and getters
         a.setPlayer(new ComputerPlayer("Professor Plum", 0, 0, "purple"), 5);
-        a.setGuess("I have no guess!", Color.magenta);
+        a.setGuess("I have no guess!", new  Color(236, 179, 255));
         a.setGuessResult("So you have nothing?", null);
     }
 }

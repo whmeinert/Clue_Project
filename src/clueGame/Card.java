@@ -16,6 +16,10 @@ public class Card implements Comparable{
         this.holdingPlayer = player;
     }
 
+    public final Player getHoldingPlayer() {
+        return this.holdingPlayer;
+    }
+
     public final CardType getCardType() {
         return this.cardType;
     }
