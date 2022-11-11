@@ -10,77 +10,93 @@ import javax.swing.text.JTextComponent;
 
 public class KnownCardsPanel extends JPanel {
     private final JPanel PERSON;
-    //private final JPanel ROOM;
-    //private final JPanel WEAPON;
+    private final JPanel ROOM;
+    private final JPanel WEAPON;
     private Board board;
 
-    public KnownCardsPanel(Board z) {
-        this.board = z;
+    public KnownCardsPanel(Board board) {
+        this.board = board;
         this.setLayout(new GridLayout(3, 1));
         TitledBorder titledBorder = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(0), "Known Cards");
         titledBorder.setTitleJustification(2);
         this.setBorder(titledBorder);
 
+        // Create panels for People, Room, and Weapon
         this.PERSON = new JPanel();
         this.PERSON.setLayout(new GridLayout(0, 1));
         this.PERSON.setBorder(new TitledBorder(new EtchedBorder(), "People"));
-        /*
         this.ROOM = new JPanel();
         this.ROOM.setLayout(new GridLayout(0, 1));
         this.ROOM.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
         this.WEAPON = new JPanel();
         this.WEAPON.setLayout(new GridLayout(0, 1));
         this.WEAPON.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
-        */
         this.updatePanels();
+
+        // Add panels for People, Room, and Weapon
         this.add(this.PERSON);
-        //this.add(this.ROOM);
-        //this.add(this.WEAPON);
+        this.add(this.ROOM);
+        this.add(this.WEAPON);
     }
 
     public final void updatePanels() {
         this.updatePanel(this.PERSON, CardType.PERSON);
-        //this.updatePanel(this.ROOM, CardType.ROOM);
-        //this.updatePanel(this.WEAPON, CardType.WEAPON);
+        this.updatePanel(this.ROOM, CardType.ROOM);
+        this.updatePanel(this.WEAPON, CardType.WEAPON);
         this.revalidate();
     }
 
-    public final void updatePanel(JPanel jPanel, CardType b) {
-        boolean bl = false;
-        boolean bl2 = false;
-        jPanel.removeAll();
+    public final void updatePanel(JPanel jPanel, CardType cardType) {
+        boolean hasCard = false;
+        boolean seenCard = false;
+
+        jPanel.removeAll();  // Reset all panels
+
+        // Create panels for cards in human players hand
         JLabel jLabel = new JLabel("In Hand:");
         jPanel.add(jLabel);
+
+        // Loop over all cards in human players hand
         for (Card card : this.board.getHuman().getHand()) {
-            if (card.getCardType() != b) continue;
+            // Check that the card type is correct
+            if (card.getCardType() != cardType) continue;
             JTextField jTextField = new JTextField(" " + card.getCardName() + " ", 12);
             jTextField.setBackground(this.board.getHuman().getBackColor());
             jTextField.setEditable(false);
             jPanel.add(jTextField);
-            bl = true;
+            hasCard = true;  // Update that there is a card in the hand
         }
-        if (!bl) {
+
+        // If hasCard is false have panel display none
+        if (!hasCard) {
             JTextComponent textComponent;
             textComponent = new JTextField(" None ", 12);
             textComponent.setBackground(Color.white);
             textComponent.setEditable(false);
             jPanel.add(textComponent);
         }
+
+        // Create panels for cards human players have seen
         jLabel = new JLabel("Seen:");
         jPanel.add(jLabel);
         int n = 1;
+
+        // Loop for every player
         while (n < this.board.getNumPlayers()) {
+            // Loop over every seen card
             for (Card card : this.board.getHuman().getSeen()) {
-                if (card.getCardType() != b || card.getHoldingPlayer() != this.board.getPlayer(n)) continue;
+                // Check that card is correct type or not in the current players hand
+                if (card.getCardType() != cardType || card.getHoldingPlayer() != this.board.getPlayer(n)) continue;
                 JTextField jTextField = new JTextField(" " + card.getCardName() + " ");
                 jTextField.setBackground(this.board.getPlayer(n).getBackColor());
                 jTextField.setEditable(false);
                 jPanel.add(jTextField);
-                bl2 = true;
+                seenCard = true;  // Update that a card has been seen
             }
-            ++n;
         }
-        if (!bl2) {
+
+        // If seenCard is false have panel display none
+        if (!seenCard) {
             JTextComponent textComponent;
             textComponent = new JTextField(" None ");
             textComponent.setEditable(false);
@@ -89,17 +105,20 @@ public class KnownCardsPanel extends JPanel {
     }
 
     public static void main(String[] stringArray) {
-        Board z = Board.getInstance();
-        z.setConfigFiles("data/ClueLayout306.csv", "data/ClueSetup306.txt");
-        z.initialize();
-        for (Player player : z.getPlayers()){
+        Board board = Board.getInstance();
+        board.setConfigFiles("data/ClueLayout.csv", "data/ClueSetup.txt");
+        board.initialize();
+
+        // Add all cards to human players seen list
+        for (Player player : board.getPlayers()){
             for (Card card : player.getHand()){
-                z.getHuman().seenCards.add(card);
+                board.getHuman().seenCards.add(card);
             }
         }
-        KnownCardsPanel k = new KnownCardsPanel(z);
+
+        KnownCardsPanel knownPanel = new KnownCardsPanel(board);
         JFrame jFrame = new JFrame();
-        jFrame.setContentPane(k);
+        jFrame.setContentPane(knownPanel);
         jFrame.setSize(180, 700);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
