@@ -24,12 +24,15 @@ public class KnownCardsPanel extends JPanel {
         this.PERSON = new JPanel();
         this.PERSON.setLayout(new GridLayout(0, 1));
         this.PERSON.setBorder(new TitledBorder(new EtchedBorder(), "People"));
+
         this.ROOM = new JPanel();
         this.ROOM.setLayout(new GridLayout(0, 1));
         this.ROOM.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
+
         this.WEAPON = new JPanel();
         this.WEAPON.setLayout(new GridLayout(0, 1));
         this.WEAPON.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+
         this.updatePanels();
 
         // Add panels for People, Room, and Weapon
