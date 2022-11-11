@@ -27,10 +27,10 @@ public class GameControlPanel extends JPanel {
         jPanel.setLayout(new GridLayout(1, 4));
         //jPanel.add(this.addActionListener());
         //jPanel.add(this.getRoll());
-        //this.add = new JButton("Make Accusation");
-        //jPanel.add(this.add);
-        //this.addActionListener = new JButton("NEXT!");
-        //jPanel.add(this.addActionListener);
+        this.add = new JButton("Make Accusation");
+        jPanel.add(this.add);
+        this.addActionListener = new JButton("NEXT!");
+        jPanel.add(this.addActionListener);
         return jPanel;
     }
 
