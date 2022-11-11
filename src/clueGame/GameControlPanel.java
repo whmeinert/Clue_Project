@@ -103,7 +103,7 @@ public class GameControlPanel extends JPanel {
         jFrame.setSize(750, 180);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
-        //a.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
+        a.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
         a.setGuess("I have no guess!", Color.orange);
         a.setGuessResult("So you have nothing?", null);
     }
