@@ -32,13 +32,13 @@ public abstract class Player {
             this.backColor = new Color(104, 252, 154);
         } else if (colorStr.contentEquals("blue")) {
             this.color = new Color(0, 150, 246);
-            this.backColor = new Color(151, 209, 248);
+            this.backColor = new Color(153, 214, 255);
         } else if (colorStr.contentEquals("white")) {
-            this.color = new Color(239, 239, 239);
+            this.color = new Color(242, 242, 242);
             this.backColor = new Color(255, 255, 255);
         } else if (colorStr.contentEquals("purple")) {
-            this.color = new Color(227, 3, 183);
-            this.backColor = new Color(221, 155, 243);
+            this.color = new Color(253, 0, 204);
+            this.backColor = new Color(236, 179, 255);
         }
         this.cards = new ArrayList<>();
         this.board = clueGame.Board.getInstance();

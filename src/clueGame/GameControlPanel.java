@@ -115,7 +115,7 @@ public class GameControlPanel extends JPanel {
 
         // Test panel setters and getters
         a.setPlayer(new ComputerPlayer("Professor Plum", 0, 0, "purple"), 5);
-        a.setGuess("I have no guess!", new Color(236, 179, 255));
+        a.setGuess("I have no guess!", new  Color(236, 179, 255));
         a.setGuessResult("So you have nothing?", null);
     }
 }

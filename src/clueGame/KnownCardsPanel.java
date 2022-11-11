@@ -92,6 +92,7 @@ public class KnownCardsPanel extends JPanel {
                 jPanel.add(jTextField);
                 seenCard = true;  // Update that a card has been seen
             }
+            n++;
         }
 
         // If seenCard is false have panel display none
