@@ -1,10 +1,12 @@
 package clueGame;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
-public class Board {
+public class Board extends JPanel {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
@@ -23,6 +25,14 @@ public class Board {
      * variable and methods used for singleton pattern
      */
     private static final Board theInstance = new Board();
+    private int deal;
+    private int disproveSuggestion;
+    private int close;
+    private int contains;
+    private int contentEquals;
+    private ClueGame currGame;
+    private GameControlPanel checkAccusation;
+    private KnownCardsPanel clearCards;
 
     // constructor is private to ensure only one can be created
     private Board() {
@@ -354,6 +364,50 @@ public class Board {
         } while ((card = otherPlayer.disproveSuggestion(solution)) == null);
         return card;
     }
+
+    @Override
+    public final void paintComponent(Graphics graphics) {
+        int n;
+        this.deal = this.getWidth();
+        this.disproveSuggestion = this.getHeight();
+        super.paintComponent(graphics);
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        graphics.setColor(Color.black);
+        graphics.fillRect(0, 0, this.deal, this.disproveSuggestion);
+        int n2 = this.deal / (this.cols + 1);
+        int n3 = this.disproveSuggestion / (this.rows + 1);
+        if (n2 > n3) {
+            this.close = n3;
+        }
+        this.close = Math.min(n2, n3);
+        this.close = Math.max(this.close, 4);
+        this.contains = Math.max(0, (this.deal - this.close * this.cols) / 2);
+        this.contentEquals = Math.max(0, (this.disproveSuggestion - this.close * this.rows) / 2);
+        int n4 = 0;
+        while (n4 < this.rows) {
+            n = 0;
+            while (n < this.cols) {
+                this.grid[n4][n].drawCell(graphics2D, this.close, this.contains, this.contentEquals);
+                ++n;
+            }
+            ++n4;
+        }
+        n4 = 0;
+        while (n4 < this.rows) {
+            n = 0;
+            while (n < this.cols) {
+                this.grid[n4][n].drawDoor(graphics2D, this.close, this.contains, this.contentEquals);
+                ++n;
+            }
+            ++n4;
+        }
+        for (Room n5 : this.roomMap.values()) {
+            n5.drawLabel(graphics2D, this.close, this.contains, this.contentEquals);
+        }
+        for (Player m : this.players) {
+            m.drawPlayer(graphics2D, this.close, this.contains, this.contentEquals);
+        }
+    }
     
     
     // Getters and setters for private variables
@@ -427,5 +481,11 @@ public class Board {
 
     public final void setPlayers(ArrayList players) {
         this.players = players;
+    }
+
+    public final void setPanels(ClueGame clueGame, GameControlPanel a, KnownCardsPanel k) {
+        this.currGame = clueGame;
+        this.checkAccusation = a;
+        this.clearCards = k;
     }
 }

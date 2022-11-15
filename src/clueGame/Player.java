@@ -16,6 +16,11 @@ public abstract class Player {
     protected Set<Card> seenCards;
 
     protected boolean get;
+    private boolean getCell;
+    private int getColumn;
+    private BoardCell getInstance;
+    private BoardCell getPlayer;
+    private int fillOval;
 
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
@@ -44,6 +49,38 @@ public abstract class Player {
         this.board = clueGame.Board.getInstance();
         this.seenCards = new HashSet();
         this.random = Board.getInstance().random;
+    }
+
+    public final void drawPlayer(Graphics2D graphics2D, int n, int n2, int n3) {
+        int n4;
+        int n5;
+        if (this.getCell && this.getColumn > 0) {
+            float f = (float)this.getColumn / 50.0f;
+            n5 = (int)((float)n2 + (float)n * ((float)this.getInstance.getColumn() + f * (float)(this.getPlayer.getColumn() - this.getInstance.getColumn())));
+            n4 = (int)((float)n3 + (float)n * ((float)this.getInstance.getRow() + f * (float)(this.getPlayer.getRow() - this.getInstance.getRow())));
+        } else {
+            int n6 = this.row;
+            int n7 = this.col;
+            if (this.getCell) {
+                n6 = this.getInstance.getRow();
+                n7 = this.getInstance.getColumn();
+            }
+            n5 = n7 * n + n2;
+            n4 = n6 * n + n3;
+            if (this.fillOval > 0) {
+                int n8 = 0;
+                while (n8 < this.fillOval) {
+                    if (this.board.getPlayer(n8).getRow() == n6 && this.board.getPlayer(n8).getColumn() == n7) {
+                        n5 += n / 2;
+                    }
+                    ++n8;
+                }
+            }
+        }
+        graphics2D.setColor(this.color);
+        graphics2D.fillOval(n5, n4, n - 1, n - 1);
+        graphics2D.setColor(Color.black);
+        graphics2D.drawOval(n5, n4, n - 1, n - 1);
     }
 
     public final Card disproveSuggestion(Solution o) {
@@ -100,5 +137,13 @@ public abstract class Player {
 
     public final Set<Card> getSeen() {
         return this.seenCards;
+    }
+
+    public final int getRow() {
+        return this.row;
+    }
+
+    public final int getColumn() {
+        return this.col;
     }
 }
