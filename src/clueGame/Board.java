@@ -25,8 +25,8 @@ public class Board extends JPanel {
      * variable and methods used for singleton pattern
      */
     private static final Board theInstance = new Board();
-    private int deal;
-    private int disproveSuggestion;
+    private int boardWidth;
+    private int boardHeight;
     private int close;
     private int contains;
     private int contentEquals;
@@ -367,45 +367,36 @@ public class Board extends JPanel {
 
     @Override
     public final void paintComponent(Graphics graphics) {
-        int n;
-        this.deal = this.getWidth();
-        this.disproveSuggestion = this.getHeight();
+        this.boardWidth = this.getWidth();
+        this.boardHeight = this.getHeight();
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D)graphics;
         graphics.setColor(Color.black);
-        graphics.fillRect(0, 0, this.deal, this.disproveSuggestion);
-        int n2 = this.deal / (this.cols + 1);
-        int n3 = this.disproveSuggestion / (this.rows + 1);
+        graphics.fillRect(0, 0, this.boardWidth, this.boardHeight);
+        int n2 = this.boardWidth / (this.cols + 1);
+        int n3 = this.boardHeight / (this.rows + 1);
         if (n2 > n3) {
             this.close = n3;
         }
         this.close = Math.min(n2, n3);
         this.close = Math.max(this.close, 4);
-        this.contains = Math.max(0, (this.deal - this.close * this.cols) / 2);
-        this.contentEquals = Math.max(0, (this.disproveSuggestion - this.close * this.rows) / 2);
-        int n4 = 0;
-        while (n4 < this.rows) {
-            n = 0;
-            while (n < this.cols) {
-                this.grid[n4][n].drawCell(graphics2D, this.close, this.contains, this.contentEquals);
-                ++n;
+        this.contains = Math.max(0, (this.boardWidth - this.close * this.cols) / 2);
+        this.contentEquals = Math.max(0, (this.boardHeight - this.close * this.rows) / 2);
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                this.grid[i][j].drawCell(graphics2D, this.close, this.contains, this.contentEquals);
             }
-            ++n4;
         }
-        n4 = 0;
-        while (n4 < this.rows) {
-            n = 0;
-            while (n < this.cols) {
-                this.grid[n4][n].drawDoor(graphics2D, this.close, this.contains, this.contentEquals);
-                ++n;
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                this.grid[i][j].drawDoor(graphics2D, this.close, this.contains, this.contentEquals);
             }
-            ++n4;
         }
-        for (Room n5 : this.roomMap.values()) {
-            n5.drawLabel(graphics2D, this.close, this.contains, this.contentEquals);
+        for (Room room : this.roomMap.values()) {
+            room.drawLabel(graphics2D, this.close, this.contains, this.contentEquals);
         }
-        for (Player m : this.players) {
-            m.drawPlayer(graphics2D, this.close, this.contains, this.contentEquals);
+        for (Player player : this.players) {
+            player.drawPlayer(graphics2D, this.close, this.contains, this.contentEquals);
         }
     }
     
