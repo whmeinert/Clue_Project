@@ -373,11 +373,9 @@ public class Board extends JPanel {
         Graphics2D graphics2D = (Graphics2D)graphics;
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, this.boardWidth, this.boardHeight);
-        int n2 = this.boardWidth / (this.cols + 1);
-        int n3 = this.boardHeight / (this.rows + 1);
-        if (n2 > n3) {
-            this.close = n3;
-        }
+        int n2 = this.boardWidth / (this.cols);
+        int n3 = this.boardHeight / (this.rows);
+
         this.close = Math.min(n2, n3);
         this.close = Math.max(this.close, 4);
         this.contains = Math.max(0, (this.boardWidth - this.close * this.cols) / 2);

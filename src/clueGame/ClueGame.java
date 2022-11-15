@@ -8,8 +8,8 @@ import javax.swing.*;
 
 public class ClueGame
         extends JFrame {
-    private String layoutConfigFile = "data/ClueLayout306.csv";
-    private String setupConfigFile = "data/ClueSetup306.txt";
+    private String layoutConfigFile = "data/ClueLayout.csv";
+    private String setupConfigFile = "data/ClueSetup.txt";
     private Board board;
     private GameControlPanel gameControlPanel;
     private KnownCardsPanel knownCardsPanel;
@@ -41,7 +41,7 @@ public class ClueGame
         this.add((Component)this.gameControlPanel, "South");
         this.add((Component)this.knownCardsPanel, "East");
         this.board.setPanels(this, this.gameControlPanel, this.knownCardsPanel);
-        this.setSize(820, 880);
+        this.setSize(801, 802);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         String string = this.board.getHuman().getName();
