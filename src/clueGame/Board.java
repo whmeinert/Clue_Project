@@ -27,9 +27,7 @@ public class Board extends JPanel {
     private static final Board theInstance = new Board();
     private int boardWidth;
     private int boardHeight;
-    private int close;
-    private int contains;
-    private int contentEquals;
+    private int cellSize;
     private ClueGame currGame;
     private GameControlPanel checkAccusation;
     private KnownCardsPanel clearCards;
@@ -373,28 +371,32 @@ public class Board extends JPanel {
         Graphics2D graphics2D = (Graphics2D)graphics;
         graphics.setColor(Color.black);
         graphics.fillRect(0, 0, this.boardWidth, this.boardHeight);
+        // Find the max cell size to fit in the current panel
         int n2 = this.boardWidth / (this.cols);
         int n3 = this.boardHeight / (this.rows);
-
-        this.close = Math.min(n2, n3);
-        this.close = Math.max(this.close, 4);
-        this.contains = Math.max(0, (this.boardWidth - this.close * this.cols) / 2);
-        this.contentEquals = Math.max(0, (this.boardHeight - this.close * this.rows) / 2);
+        this.cellSize = Math.min(n2, n3);
+        this.cellSize = Math.max(this.cellSize, 4);
+        int maxWidth = Math.max(0, (this.boardWidth - this.cellSize * this.cols) / 2);
+        int maxHeight = Math.max(0, (this.boardHeight - this.cellSize * this.rows) / 2);
+        // Draw all cells
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.cols; j++) {
-                this.grid[i][j].drawCell(graphics2D, this.close, this.contains, this.contentEquals);
+                this.grid[i][j].drawCell(graphics2D, this.cellSize, maxWidth, maxHeight);
             }
         }
+        // Draw Doors
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.cols; j++) {
-                this.grid[i][j].drawDoor(graphics2D, this.close, this.contains, this.contentEquals);
+                this.grid[i][j].drawDoor(graphics2D, this.cellSize, maxWidth, maxHeight);
             }
         }
+        // Draw Labels
         for (Room room : this.roomMap.values()) {
-            room.drawLabel(graphics2D, this.close, this.contains, this.contentEquals);
+            room.drawLabel(graphics2D, this.cellSize, maxWidth, maxHeight);
         }
+        // Draw Players
         for (Player player : this.players) {
-            player.drawPlayer(graphics2D, this.close, this.contains, this.contentEquals);
+            player.drawPlayer(graphics2D, this.cellSize, maxWidth, maxHeight);
         }
     }
     

@@ -15,13 +15,6 @@ public abstract class Player {
     protected Random random;
     protected Set<Card> seenCards;
 
-    protected boolean get;
-    private boolean getCell;
-    private int getColumn;
-    private BoardCell getInstance;
-    private BoardCell getPlayer;
-    private int fillOval;
-
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
         this.row = row;
@@ -30,7 +23,7 @@ public abstract class Player {
             this.color = new Color(255, 0, 0);
             this.backColor = new Color(253, 133, 133);
         } else if (colorStr.contentEquals("orange")) {
-            this.color = new Color(252, 202, 2);
+            this.color = new Color(225, 173, 1);
             this.backColor = new Color(252, 223, 109);
         } else if (colorStr.contentEquals("green")) {
             this.color = new Color(1, 213, 72);
@@ -54,33 +47,14 @@ public abstract class Player {
     public final void drawPlayer(Graphics2D graphics2D, int n, int n2, int n3) {
         int n4;
         int n5;
-        if (this.getCell && this.getColumn > 0) {
-            float f = (float)this.getColumn / 50.0f;
-            n5 = (int)((float)n2 + (float)n * ((float)this.getInstance.getColumn() + f * (float)(this.getPlayer.getColumn() - this.getInstance.getColumn())));
-            n4 = (int)((float)n3 + (float)n * ((float)this.getInstance.getRow() + f * (float)(this.getPlayer.getRow() - this.getInstance.getRow())));
-        } else {
-            int n6 = this.row;
-            int n7 = this.col;
-            if (this.getCell) {
-                n6 = this.getInstance.getRow();
-                n7 = this.getInstance.getColumn();
-            }
-            n5 = n7 * n + n2;
-            n4 = n6 * n + n3;
-            if (this.fillOval > 0) {
-                int n8 = 0;
-                while (n8 < this.fillOval) {
-                    if (this.board.getPlayer(n8).getRow() == n6 && this.board.getPlayer(n8).getColumn() == n7) {
-                        n5 += n / 2;
-                    }
-                    ++n8;
-                }
-            }
-        }
+        int n6 = this.row;
+        int n7 = this.col;
+        n5 = n7 * n + n2;
+        n4 = n6 * n + n3;
         graphics2D.setColor(this.color);
-        graphics2D.fillOval(n5, n4, n - 1, n - 1);
+        graphics2D.fillOval(n5, n4, n - 1, n - 1);  // Draw player circle
         graphics2D.setColor(Color.black);
-        graphics2D.drawOval(n5, n4, n - 1, n - 1);
+        graphics2D.drawOval(n5, n4, n - 1, n - 1);  // Draw black outline around circle
     }
 
     public final Card disproveSuggestion(Solution o) {

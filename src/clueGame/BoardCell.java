@@ -62,9 +62,7 @@ public class BoardCell {
 	public final void drawCell(Graphics2D graphics2D, int n, int n2, int n3) {
 		int n4 = this.row * n + n3;
 		int n5 = this.col * n + n2;
-		if (this.RIGHT) {
-			graphics2D.setColor(Color.CYAN);
-		} else if (this.isWalkway()) {
+		if (this.isWalkway()) {
 			graphics2D.setColor(Color.YELLOW);
 		} else if (this.isUnused()) {
 			graphics2D.setColor(Color.BLACK);
@@ -76,31 +74,7 @@ public class BoardCell {
 			graphics2D.setColor(Color.black);
 			graphics2D.drawRect(n5, n4, n - 1, n - 1);
 		}
-		if (this.secretPassage != '\u0000') {
-			graphics2D.setColor(Color.black);
-			graphics2D.fillRect(n5, n4, n, n);
-			int[] nArray = new int[5];
-			int[] nArray2 = new int[5];
-			nArray[0] = n5 + 1;
-			nArray2[0] = n4 + 1;
-			nArray[1] = n5 + n * 4 / 5;
-			nArray2[1] = n4 + n / 5;
-			nArray[2] = nArray[1];
-			nArray2[2] = n4 + n;
-			nArray[3] = n5 + 1;
-			nArray2[3] = nArray2[2];
-			nArray[4] = nArray[0];
-			nArray2[4] = nArray2[0];
-			graphics2D.setColor(Color.yellow);
-			graphics2D.fillPolygon(nArray, nArray2, 4);
-			int n6 = n * 2 / 3;
-			int n7 = n5 + n / 5;
-			int n8 = n4 + n * 4 / 5;
-			Font font = new Font("Comic Sans MS", 1, n6);
-			graphics2D.setFont(font);
-			graphics2D.setColor(Color.BLUE);
-			graphics2D.drawString("S", n7, n8);
-		}
+
 	}
 
 	public final void drawDoor(Graphics2D graphics2D, int n, int n2, int n3) {

@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Room {
 	private final String name;
@@ -21,7 +22,8 @@ public class Room {
 		int n4 = n * 2 / 3;
 		int n5 = n * this.labelCell.getColumn() + n2;
 		int n6 = n * (1 + this.labelCell.getRow()) + n3;
-		Font font = new Font("Comic Sans MS", 1, n4);
+
+		Font font = new Font("Comic Sans MS", Font.BOLD, n4);
 		graphics2D.setFont(font);
 		graphics2D.setColor(Color.BLUE);
 		graphics2D.drawString(this.name, n5, n6);
