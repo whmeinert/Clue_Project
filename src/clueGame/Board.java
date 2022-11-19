@@ -37,7 +37,7 @@ public class Board extends JPanel implements MouseListener {
     private GameControlPanel checkAccusation;
     private KnownCardsPanel clearCards;
     private int addAdj = -1;
-    private Player addMouseListener;
+    private Player currPlayer;
     int close;
     int contains;
     int contentEquals;
@@ -56,6 +56,7 @@ public class Board extends JPanel implements MouseListener {
      * initialize the board (since we are using singleton pattern)
      */
     public void initialize() {
+        this.addMouseListener(this);
         this.players = new ArrayList<Player>();
         this.cards = new ArrayList<Card>();
     	this.loadDataFiles();
@@ -360,27 +361,6 @@ public class Board extends JPanel implements MouseListener {
         Collections.sort(this.cards);
     }
 
-    public final boolean makeAccusation() {
-        boolean bl = false;
-        if (this.humanPlayer.isFinished()) {
-            JOptionPane.showMessageDialog(null, "It is not your turn!");
-            return bl;
-        }
-        G g = new G(this, null);
-        g.setVisible(true);
-        if (g.isSubmitted()) {
-            Solution o = g.getSolution();
-            bl = this.checkAccusation(o);
-            if (bl) {
-                JOptionPane.showMessageDialog(null, "You win!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Sorry, not correct! You lose!");
-            }
-            System.exit(0);
-        }
-        return bl;
-    }
-
     public final boolean checkAccusation(Solution solution) {
         return solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room);
     }
@@ -473,22 +453,13 @@ public class Board extends JPanel implements MouseListener {
             this.humanPlayer.finishTurn(c);
             this.highlightTargets(false);
             this.repaint();
-            if (c.isRoom()) {
-                Room n = c.getRoom();
-                G g = new G(this, n);
-                g.setVisible(true);
-                if (g.isSubmitted()) {
-                    this.doSuggestion(g.getSolution(), this.getHuman(), c);
-                    this.repaint();
-                }
-            }
         }
     }
 
     public final BoardCell findClickedCell(int n, int n2) {
         if (this.targets != null) {
-            int n3 = (n2 - this.contentEquals) / this.close;
-            int n4 = (n - this.contains) / this.close;
+            int n3 = (n2 - this.contentEquals) / this.cellSize;
+            int n4 = (n - this.contains) / this.cellSize;
             BoardCell c = this.grid[n3][n4];
             if (c.isRoom()) {
                 c = c.getRoom().getCenterCell();
@@ -506,11 +477,11 @@ public class Board extends JPanel implements MouseListener {
             return;
         }
         this.addAdj = (this.addAdj + 1) % this.players.size();
-        this.addMouseListener = (Player)this.players.get(this.addAdj);
+        this.currPlayer = (Player)this.players.get(this.addAdj);
         int n = this.random.nextInt(5) + 1;
-        this.checkAccusation.setPlayer(this.addMouseListener, n);
-        this.calcTargets(this.getCell(this.addMouseListener.getRow(), this.addMouseListener.getColumn()), n, this.addMouseListener.getMayStay());
-        this.addMouseListener.makeMove();
+        this.checkAccusation.setPlayer(this.currPlayer, n);
+        this.calcTargets(this.getCell(this.currPlayer.getRow(), this.currPlayer.getColumn()), n, this.currPlayer.getMayStay());
+        this.currPlayer.makeMove();
         this.repaint();
     }
 
