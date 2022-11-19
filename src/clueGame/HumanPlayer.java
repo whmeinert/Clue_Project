@@ -3,7 +3,7 @@ package clueGame;
 import javax.swing.*;
 
 public class HumanPlayer extends Player{
-    private boolean mayStay = true;
+    private boolean finished = true;
     public HumanPlayer(String name, int row, int col, String color) {
         super(name, row, col, color);
     }
@@ -12,21 +12,24 @@ public class HumanPlayer extends Player{
     public final void makeMove() {
         if (this.board.getTargets().size() == 0) {
             JOptionPane.showMessageDialog(null, "No move is available.");
-            this.mayStay = true;
+            this.finished = true;
             return;
         }
-        this.mayStay = false;
+        this.finished = false;
         this.board.highlightTargets(true);
     }
 
     public final void finishTurn(BoardCell c) {
-        this.mayStay = true;
+        this.finished = true;
         this.setLoc(c, false);
     }
 
     public boolean isFinished() {
-        return this.mayStay;
+        return this.finished;
     }
 
+    public final void setFinished(boolean bl) {
+        this.finished = bl;
+    }
 
 }

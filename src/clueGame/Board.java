@@ -1,7 +1,10 @@
 package clueGame;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
@@ -498,6 +501,10 @@ public class Board extends JPanel implements MouseListener {
     }
 
     public final void nextPlayer() {
+        if (!this.humanPlayer.isFinished()) {
+            JOptionPane.showMessageDialog(null, "Please finish your turn!");
+            return;
+        }
         this.addAdj = (this.addAdj + 1) % this.players.size();
         this.addMouseListener = (Player)this.players.get(this.addAdj);
         int n = this.random.nextInt(5) + 1;
