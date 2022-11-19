@@ -3,6 +3,7 @@ package clueGame;
 import java.util.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import javax.swing.Timer;
 
 public abstract class Player {
     private final String name;
@@ -14,7 +15,12 @@ public abstract class Player {
     private ArrayList<Card> cards;
     protected Random random;
     protected Set<Card> seenCards;
-    private boolean mayStay;
+    protected boolean mayStay;
+    private boolean getCell;
+    private int getColumn;
+    private BoardCell getInstance;
+    private BoardCell getPlayer;
+    private Timer getRow;
 
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
@@ -73,13 +79,24 @@ public abstract class Player {
         return d3;
     }
 
-    public final void setLoc(BoardCell cell) {
+    public final void setLoc(BoardCell cell, boolean mayStay) {
+        this.mayStay = false;
         if (cell != this.board.getCell(this.row, this.col)) {
             this.board.getCell(this.row, this.col).setOccupied(false);
+            this.setupAnimateMove(cell, mayStay);
             this.row = cell.getRow();
             this.col = cell.getColumn();
             cell.setOccupied(true);
         }
+    }
+
+    public final void setupAnimateMove(BoardCell c, boolean bl) {
+        this.getCell = true;
+        this.getColumn = bl ? -50 : 0;
+        this.getPlayer = c;
+        this.getInstance = this.board.getCell(this.row, this.col);
+        //this.getRow = new Timer(10, new L(this));
+        //this.getRow.start();
     }
 
     public final void updateSeen(Card d) {

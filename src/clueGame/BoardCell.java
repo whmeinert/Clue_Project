@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 public class BoardCell {
-	private static final boolean RIGHT = false;
+	private static boolean RIGHT = false;
 	public int row, col;
 	private final Boolean isRoom = false;
 	private Boolean isOccupied = false;
@@ -186,5 +186,9 @@ public class BoardCell {
 
 	public final int getScore() {
 		return this.score;
+	}
+
+	public final void setHighlight(boolean bl) {
+		this.RIGHT = bl;
 	}
 }

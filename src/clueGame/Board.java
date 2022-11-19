@@ -498,4 +498,26 @@ public class Board extends JPanel {
         this.checkAccusation = a;
         this.clearCards = k;
     }
+
+    public void highlightTargets(boolean b) {
+        if (this.targets != null) {
+            for (BoardCell c : this.targets) {
+                if (c.isRoom()) {
+                    int n = 0;
+                    while (n < this.rows) {
+                        int n2 = 0;
+                        while (n2 < this.cols) {
+                            if (this.grid[n][n2].getRoom() == c.getRoom()) {
+                                this.grid[n][n2].setHighlight(b);
+                            }
+                            ++n2;
+                        }
+                        ++n;
+                    }
+                    continue;
+                }
+                c.setHighlight(b);
+            }
+        }
+    }
 }

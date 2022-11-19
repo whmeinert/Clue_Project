@@ -47,6 +47,9 @@ public class ClueGame
         this.setSize(801, 802);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        String string = this.board.getHuman().getName();
+        JOptionPane.showMessageDialog(this, "    You are " + string + ".\n  Can you find the solution\nbefore the Computer players?", "Welcome to Clue", 1);
+        this.board.nextPlayer();
     }
 
     public static final void main(String[] stringArray) {

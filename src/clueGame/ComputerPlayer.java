@@ -1,9 +1,11 @@
 package clueGame;
 
+import javax.swing.*;
 import java.util.*;
 
 public class ComputerPlayer extends Player{
     private boolean mayStay = false;
+    private Solution solution = new Solution();
     public ComputerPlayer(String name, int row, int col, String color) {
         super(name, row, col, color);
     }
@@ -78,14 +80,15 @@ public class ComputerPlayer extends Player{
     @Override
     public final void makeMove() {
         if (this.mayStay) {
-            this.makeAccusation();
+            //this.makeAccusation();
         } else {
             Set set = this.board.getTargets();
             BoardCell c = this.selectTarget(set);
             this.setLoc(c, false);
             if (c.isRoom()) {
-                this.makeSuggestion(c);
+                //this.makeSuggestion(c);
             }
         }
     }
+
 }

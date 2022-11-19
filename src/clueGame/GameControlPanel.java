@@ -22,16 +22,35 @@ public class GameControlPanel extends JPanel {
         this.add(this.getLowerPanels());
     }
 
+    public final void nextPlayer() {
+        this.setGuess("", null);
+        this.setGuessResult("", null);
+        this.board.nextPlayer();
+        this.repaint();
+    }
+
     // Creates and sets the panels in the upper half of the main panel
     private JPanel getUpperPanels() {
         JPanel jPanel = new JPanel();
+        ButtonListener s = new ButtonListener(this, null);
         jPanel.setLayout(new GridLayout(1, 4));
-        jPanel.add(this.getPlayer());
+        jPanel.add(this.addActionListener());
         jPanel.add(this.getRoll());
         this.accButton = new JButton("Make Accusation");
+        this.accButton.addActionListener(s);
         jPanel.add(this.accButton);
         this.nextButton = new JButton("NEXT!");
+        this.nextButton.addActionListener(s);
         jPanel.add(this.nextButton);
+        return jPanel;
+    }
+
+    private JPanel addActionListener() {
+        JPanel jPanel = new JPanel();
+        jPanel.add(new JLabel("Whose turn?"));
+        this.currPlayerField = new JTextField(15);
+        this.currPlayerField.setEditable(false);
+        jPanel.add(this.currPlayerField);
         return jPanel;
     }
 
@@ -120,5 +139,17 @@ public class GameControlPanel extends JPanel {
     }
 
     public void setTurn(Player addMouseListener, int n) {
+    }
+
+    static final /* synthetic */ JButton I(GameControlPanel a) {
+        return a.nextButton;
+    }
+
+    static final /* synthetic */ JButton Z(GameControlPanel a) {
+        return a.accButton;
+    }
+
+    static final /* synthetic */ Board C(GameControlPanel a) {
+        return a.board;
     }
 }
