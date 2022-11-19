@@ -108,8 +108,6 @@ public class FileInitTests {
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Laboratory" ) ;
-		assertTrue( cell.isLabel() );
-		assertTrue( room.getLabelCell() == cell );
 		
 		// this is a room center cell to test
 		cell = board.getCell(13, 12);
