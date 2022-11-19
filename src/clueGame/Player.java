@@ -16,17 +16,19 @@ public abstract class Player {
     protected Random random;
     protected Set<Card> seenCards;
     protected boolean mayStay;
-    private boolean getCell;
-    private int getColumn;
+    private boolean canMove;
+    private int animationStep;
     private BoardCell getInstance;
     private BoardCell getPlayer;
-    private Timer getRow;
-    protected int fillOval;
+    private Timer timer;
+    private static int iterator = 0;
+    protected int playerNum;
 
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
         this.row = row;
         this.col = col;
+        this.playerNum = iterator++;
         if (colorStr.contentEquals("red")) {
             this.color = new Color(255, 0, 0);
             this.backColor = new Color(253, 133, 133);
@@ -55,22 +57,22 @@ public abstract class Player {
     public final void drawPlayer(Graphics2D graphics2D, int n, int n2, int n3) {
         int n4;
         int n5;
-        if (this.getCell && this.getColumn > 0) {
-            float f = (float)this.getColumn / 50.0f;
+        if (this.canMove && this.animationStep > 0) {
+            float f = (float)this.animationStep / 50.0f;
             n5 = (int)((float)n2 + (float)n * ((float)this.getInstance.getColumn() + f * (float)(this.getPlayer.getColumn() - this.getInstance.getColumn())));
             n4 = (int)((float)n3 + (float)n * ((float)this.getInstance.getRow() + f * (float)(this.getPlayer.getRow() - this.getInstance.getRow())));
         } else {
             int n6 = this.row;
             int n7 = this.col;
-            if (this.getCell) {
+            if (this.canMove) {
                 n6 = this.getInstance.getRow();
                 n7 = this.getInstance.getColumn();
             }
             n5 = n7 * n + n2;
             n4 = n6 * n + n3;
-            if (this.fillOval > 0) {
+            if (this.playerNum > 0) {
                 int n8 = 0;
-                while (n8 < this.fillOval) {
+                while (n8 < this.playerNum) {
                     if (this.board.getPlayer(n8).getRow() == n6 && this.board.getPlayer(n8).getColumn() == n7) {
                         n5 += n / 2;
                     }
@@ -110,18 +112,19 @@ public abstract class Player {
         }
     }
 
+    // add
     public final boolean animateMove() {
-        ++this.getColumn;
-        return this.getColumn > 50;
+        ++this.animationStep;
+        return this.animationStep > 50;
     }
 
     public final void setupAnimateMove(BoardCell c, boolean bl) {
-        this.getCell = true;
-        this.getColumn = bl ? -50 : 0;
+        this.canMove = true;
+        this.animationStep = bl ? -50 : 0;
         this.getPlayer = c;
         this.getInstance = this.board.getCell(this.row, this.col);
-        this.getRow = new Timer(10, new L(this));
-        this.getRow.start();
+        this.timer = new Timer(10, new AnimateMove(this));
+        this.timer.start();
     }
 
     public final void updateSeen(Card d) {
@@ -174,11 +177,11 @@ public abstract class Player {
         return this.mayStay;
     }
 
-    static final /* synthetic */ void I(Player m, boolean bl) {
-        m.getCell = bl;
+    static final /* synthetic */ void I(Player player, boolean bl) {
+        player.canMove = bl;
     }
 
     static final /* synthetic */ Timer I(Player m) {
-        return m.getRow;
+        return m.timer;
     }
 }

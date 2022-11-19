@@ -1,14 +1,13 @@
 package clueGame;
 
-import clueGame.Player;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class L
+class AnimateMove
         implements ActionListener {
     final /* synthetic */ Player animateMove;
 
-    L(Player m) {
+    AnimateMove(Player m) {
         this.animateMove = m;
     }
 

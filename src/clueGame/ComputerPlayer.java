@@ -27,13 +27,13 @@ public class ComputerPlayer extends Player{
         return arrayList.get(n2);
     }
 
-    private void checkCell(BoardCell c) {
+    private void checkCell(BoardCell cell) {
         int n = 1000;
-        if (c.isRoom()) {
-            if (this.seenCards.contains(c.getRoom().getCard())) {
-                c.setScore(50);
+        if (cell.isRoom()) {
+            if (this.seenCards.contains(cell.getRoom().getCard())) {
+                cell.setScore(50);
             } else {
-                c.setScore(0);
+                cell.setScore(0);
             }
             return;
         }
@@ -41,10 +41,10 @@ public class ComputerPlayer extends Player{
         while (n2 < this.board.getNumRows()) {
             int n3 = 0;
             while (n3 < this.board.getNumColumns()) {
-                BoardCell c2 = this.board.getCell(n2, n3);
-                if (c2.isDoorway()) {
-                    int n4 = Math.abs(n2 - c.getRow()) + Math.abs(n3 - c.getColumn());
-                    if (this.seenCards.contains(c2.getToRoom().getCard())) {
+                BoardCell cell2 = this.board.getCell(n2, n3);
+                if (cell2.isDoorway()) {
+                    int n4 = Math.abs(n2 - cell.getRow()) + Math.abs(n3 - cell.getColumn());
+                    if (this.seenCards.contains(cell2.getToRoom().getCard())) {
                         n4 += 50;
                     }
                     n = Math.min(n, n4);
@@ -53,7 +53,7 @@ public class ComputerPlayer extends Player{
             }
             ++n2;
         }
-        c.setScore(n);
+        cell.setScore(n);
     }
 
     public final Solution createSuggestion(Room room) {
@@ -69,22 +69,18 @@ public class ComputerPlayer extends Player{
             if (card.getCardType() != clueGame.CardType.WEAPON || this.seenCards.contains(card)) { continue; }
             weaponList.add(card);
         }
-        int n2 = this.random.nextInt(personList.size());
-        newSuggestion.person = (Card)personList.get(n2);
-        n2 = this.random.nextInt(weaponList.size());
-        newSuggestion.weapon = (Card)weaponList.get(n2);
+        int randIndex = this.random.nextInt(personList.size());
+        newSuggestion.person = (Card)personList.get(randIndex);
+        randIndex = this.random.nextInt(weaponList.size());
+        newSuggestion.weapon = (Card)weaponList.get(randIndex);
         return newSuggestion;
     }
 
     @Override
     public final void makeMove() {
-        if (this.hasMoved) {
-            //this.makeAccusation();
-        } else {
-            Set targets = this.board.getTargets();
-            BoardCell c = this.selectTarget(targets);
-            this.setLoc(c, false);
-        }
+        Set targets = this.board.getTargets();
+        BoardCell cell = this.selectTarget(targets);
+        this.setLoc(cell, false);
     }
 
 }

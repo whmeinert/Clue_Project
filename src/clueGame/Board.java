@@ -34,13 +34,13 @@ public class Board extends JPanel implements MouseListener {
     private int boardHeight;
     private int cellSize;
     private ClueGame currGame;
-    private GameControlPanel checkAccusation;
-    private KnownCardsPanel clearCards;
-    private int addAdj = -1;
+    private GameControlPanel gameControlPanel;
+    private KnownCardsPanel knownCardsPanel;
+    private int currIndex = -1;
     private Player currPlayer;
-    int close;
-    int contains;
-    int contentEquals;
+    int maxWidth;
+    int maxHeight;
+
 
     // constructor is private to ensure only one can be created
     private Board() {
@@ -377,33 +377,6 @@ public class Board extends JPanel implements MouseListener {
         return card;
     }
 
-    public final boolean doSuggestion(Solution o, Player m, BoardCell c) {
-        this.checkAccusation.setGuess(String.valueOf(o.person.getCardName()) + ", " + o.room.getCardName() + ", " + o.weapon.getCardName(), m.getColor());
-        this.ROOM(o.person, c);
-        Card d = this.handleSuggestion(o, m);
-        if (d != null) {
-            m.updateSeen(d);
-            if (m == this.humanPlayer) {
-                this.checkAccusation.setGuessResult(d.getCardName(), d.getHoldingPlayer().getColor());
-                this.clearCards.updatePanels();
-            } else {
-                this.checkAccusation.setGuessResult("Suggestion disproven!", d.getHoldingPlayer().getColor());
-            }
-        } else {
-            this.checkAccusation.setGuessResult("No new clue", null);
-        }
-        return d != null;
-    }
-
-    private void ROOM(Card d, BoardCell c) {
-        for (Player m : this.players) {
-            if (!m.getName().contentEquals(d.getCardName())) continue;
-            m.setLoc(c, true);
-            m.setMayStay(true);
-            break;
-        }
-    }
-
     @Override
     public final void paintComponent(Graphics graphics) {
         this.boardWidth = this.getWidth();
@@ -417,69 +390,77 @@ public class Board extends JPanel implements MouseListener {
         int n3 = this.boardHeight / (this.rows);
         this.cellSize = Math.min(n2, n3);
         this.cellSize = Math.max(this.cellSize, 4);
-        int maxWidth = Math.max(0, (this.boardWidth - this.cellSize * this.cols) / 2);
-        int maxHeight = Math.max(0, (this.boardHeight - this.cellSize * this.rows) / 2);
+        this.maxWidth = Math.max(0, (this.boardWidth - this.cellSize * this.cols) / 2);
+        this.maxHeight = Math.max(0, (this.boardHeight - this.cellSize * this.rows) / 2);
         // Draw all cells
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.cols; j++) {
-                this.grid[i][j].drawCell(graphics2D, this.cellSize, maxWidth, maxHeight);
+                this.grid[i][j].drawCell(graphics2D, this.cellSize, this.maxWidth, this.maxHeight);
             }
         }
         // Draw Doors
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.cols; j++) {
-                this.grid[i][j].drawDoor(graphics2D, this.cellSize, maxWidth, maxHeight);
+                this.grid[i][j].drawDoor(graphics2D, this.cellSize, this.maxWidth, this.maxHeight);
             }
         }
         // Draw Labels
         for (Room room : this.roomMap.values()) {
-            room.drawLabel(graphics2D, this.cellSize, maxWidth, maxHeight);
+            room.drawLabel(graphics2D, this.cellSize, this.maxWidth, this.maxHeight);
         }
         // Draw Players
         for (Player player : this.players) {
-            player.drawPlayer(graphics2D, this.cellSize, maxWidth, maxHeight);
+            player.drawPlayer(graphics2D, this.cellSize, this.maxWidth, this.maxHeight);
         }
     }
 
     @Override
     public final void mouseReleased(MouseEvent mouseEvent) {
+        // check if the player has moved
         if (this.humanPlayer.isFinished()) {
             return;
         }
-        BoardCell c = this.findClickedCell(mouseEvent.getX(), mouseEvent.getY());
-        if (c == null) {
+        BoardCell clickedCell = this.findClickedCell(mouseEvent.getX(), mouseEvent.getY());
+        if (clickedCell == null) {
+            // Display message if cell click is not a target
             JOptionPane.showMessageDialog(null, "That is not a target");
         } else {
-            this.humanPlayer.finishTurn(c);
+            // Move the player and turn off highlighted targets and repaint the board
+            this.humanPlayer.finishTurn(clickedCell);
             this.highlightTargets(false);
             this.repaint();
         }
     }
 
-    public final BoardCell findClickedCell(int n, int n2) {
+    public final BoardCell findClickedCell(int y, int x) {
         if (this.targets != null) {
-            int n3 = (n2 - this.contentEquals) / this.cellSize;
-            int n4 = (n - this.contains) / this.cellSize;
-            BoardCell c = this.grid[n3][n4];
-            if (c.isRoom()) {
-                c = c.getRoom().getCenterCell();
+            // calculate the cell clicked on
+            int row = (x - this.maxWidth) / this.cellSize;
+            int col = (y - this.maxHeight) / this.cellSize;
+            BoardCell clickedCell = this.grid[row][col];
+            // Check is the cell clicked is a room
+            if (clickedCell.isRoom()) {
+                clickedCell = clickedCell.getRoom().getCenterCell();
             }
-            if (this.targets.contains(c)) {
-                return c;
+            // Make sure the cell clicked is a target cell
+            if (this.targets.contains(clickedCell)) {
+                return clickedCell;
             }
         }
         return null;
     }
 
     public final void nextPlayer() {
+        // Check that the player has moved, if not display message
         if (!this.humanPlayer.isFinished()) {
             JOptionPane.showMessageDialog(null, "Please finish your turn!");
             return;
         }
-        this.addAdj = (this.addAdj + 1) % this.players.size();
-        this.currPlayer = (Player)this.players.get(this.addAdj);
+        // Find the next person in the array and set them to the current player
+        this.currIndex = (this.currIndex + 1) % this.players.size();
+        this.currPlayer = (Player)this.players.get(this.currIndex);
         int n = this.random.nextInt(5) + 1;
-        this.checkAccusation.setPlayer(this.currPlayer, n);
+        this.gameControlPanel.setPlayer(this.currPlayer, n);
         this.calcTargets(this.getCell(this.currPlayer.getRow(), this.currPlayer.getColumn()), n, this.currPlayer.getMayStay());
         this.currPlayer.makeMove();
         this.repaint();
@@ -581,8 +562,8 @@ public class Board extends JPanel implements MouseListener {
 
     public final void setPanels(ClueGame clueGame, GameControlPanel a, KnownCardsPanel k) {
         this.currGame = clueGame;
-        this.checkAccusation = a;
-        this.clearCards = k;
+        this.gameControlPanel = a;
+        this.knownCardsPanel = k;
     }
 
     public void highlightTargets(boolean b) {
