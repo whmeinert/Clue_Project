@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.util.*;
 
 public class Board extends JPanel {
-	private BoardCell[][] grid;
+    private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
 	private int cols;
@@ -31,6 +31,8 @@ public class Board extends JPanel {
     private ClueGame currGame;
     private GameControlPanel checkAccusation;
     private KnownCardsPanel clearCards;
+    private int addAdj = -1;
+    private Player addMouseListener;
 
     // constructor is private to ensure only one can be created
     private Board() {
@@ -272,9 +274,12 @@ public class Board extends JPanel {
     }
 	
 	// calculates the targets for the given cell
-	public final void calcTargets(BoardCell cell, int numMoves) {
+	public final void calcTargets(BoardCell cell, int numMoves, boolean isHuman) {
         this.targets = new HashSet<>();
         this.visited = new HashSet<>();
+        if (isHuman){
+            this.targets.add(cell);
+        }
         this.visited.add(cell);
         this.calcRecurse(cell, numMoves);
     }
@@ -286,7 +291,7 @@ public class Board extends JPanel {
             if (this.visited.contains(move) || move.isOccupied()) {
             	continue;
             }
-            
+
             this.visited.add(move);
             
             if (move.isRoom()) {
@@ -399,7 +404,21 @@ public class Board extends JPanel {
             player.drawPlayer(graphics2D, this.cellSize, maxWidth, maxHeight);
         }
     }
-    
+
+    public final void nextPlayer() {
+        if (!this.humanPlayer.isFinished()) {
+            JOptionPane.showMessageDialog(null, "Please finish your turn!");
+            return;
+        }
+        this.addAdj = (this.addAdj + 1) % this.players.size();
+        this.addMouseListener = (Player)this.players.get(this.addAdj);
+        int n = this.random.nextInt(5) + 1;
+        this.checkAccusation.setTurn(this.addMouseListener, n);
+        this.calcTargets(this.getCell(this.addMouseListener.getRow(), this.addMouseListener.getColumn()), n, this.addMouseListener.getMayStay());
+        this.addMouseListener.makeMove();
+        this.repaint();
+    }
+
     
     // Getters and setters for private variables
     

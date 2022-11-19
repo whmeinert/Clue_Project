@@ -3,6 +3,7 @@ package clueGame;
 import java.util.*;
 
 public class ComputerPlayer extends Player{
+    private boolean mayStay = false;
     public ComputerPlayer(String name, int row, int col, String color) {
         super(name, row, col, color);
     }
@@ -72,5 +73,19 @@ public class ComputerPlayer extends Player{
         n2 = this.random.nextInt(weaponList.size());
         newSuggestion.weapon = (Card)weaponList.get(n2);
         return newSuggestion;
+    }
+
+    @Override
+    public final void makeMove() {
+        if (this.mayStay) {
+            this.makeAccusation();
+        } else {
+            Set set = this.board.getTargets();
+            BoardCell c = this.selectTarget(set);
+            this.setLoc(c, false);
+            if (c.isRoom()) {
+                this.makeSuggestion(c);
+            }
+        }
     }
 }

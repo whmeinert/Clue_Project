@@ -14,6 +14,7 @@ public abstract class Player {
     private ArrayList<Card> cards;
     protected Random random;
     protected Set<Card> seenCards;
+    private boolean mayStay;
 
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
@@ -119,5 +120,15 @@ public abstract class Player {
 
     public final int getColumn() {
         return this.col;
+    }
+
+    public abstract void makeMove();
+
+    public final void setMayStay(boolean bl) {
+        this.mayStay = bl;
+    }
+
+    public final boolean getMayStay() {
+        return this.mayStay;
     }
 }
