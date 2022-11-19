@@ -413,9 +413,13 @@ public class Board extends JPanel {
         this.addAdj = (this.addAdj + 1) % this.players.size();
         this.addMouseListener = (Player)this.players.get(this.addAdj);
         int n = this.random.nextInt(5) + 1;
-        this.checkAccusation.setTurn(this.addMouseListener, n);
+        this.checkAccusation.setPlayer(this.addMouseListener, n);
         this.calcTargets(this.getCell(this.addMouseListener.getRow(), this.addMouseListener.getColumn()), n, this.addMouseListener.getMayStay());
         this.addMouseListener.makeMove();
+        this.repaint();
+    }
+
+    public final void boardRepaint() {
         this.repaint();
     }
 

@@ -21,6 +21,7 @@ public abstract class Player {
     private BoardCell getInstance;
     private BoardCell getPlayer;
     private Timer getRow;
+    protected int fillOval;
 
     public Player(String name, int row, int col, String colorStr) {
         this.name = name;
@@ -54,14 +55,33 @@ public abstract class Player {
     public final void drawPlayer(Graphics2D graphics2D, int n, int n2, int n3) {
         int n4;
         int n5;
-        int n6 = this.row;
-        int n7 = this.col;
-        n5 = n7 * n + n2;
-        n4 = n6 * n + n3;
+        if (this.getCell && this.getColumn > 0) {
+            float f = (float)this.getColumn / 50.0f;
+            n5 = (int)((float)n2 + (float)n * ((float)this.getInstance.getColumn() + f * (float)(this.getPlayer.getColumn() - this.getInstance.getColumn())));
+            n4 = (int)((float)n3 + (float)n * ((float)this.getInstance.getRow() + f * (float)(this.getPlayer.getRow() - this.getInstance.getRow())));
+        } else {
+            int n6 = this.row;
+            int n7 = this.col;
+            if (this.getCell) {
+                n6 = this.getInstance.getRow();
+                n7 = this.getInstance.getColumn();
+            }
+            n5 = n7 * n + n2;
+            n4 = n6 * n + n3;
+            if (this.fillOval > 0) {
+                int n8 = 0;
+                while (n8 < this.fillOval) {
+                    if (this.board.getPlayer(n8).getRow() == n6 && this.board.getPlayer(n8).getColumn() == n7) {
+                        n5 += n / 2;
+                    }
+                    ++n8;
+                }
+            }
+        }
         graphics2D.setColor(this.color);
-        graphics2D.fillOval(n5, n4, n - 1, n - 1);  // Draw player circle
+        graphics2D.fillOval(n5, n4, n - 1, n - 1);
         graphics2D.setColor(Color.black);
-        graphics2D.drawOval(n5, n4, n - 1, n - 1);  // Draw black outline around circle
+        graphics2D.drawOval(n5, n4, n - 1, n - 1);
     }
 
     public final Card disproveSuggestion(Solution o) {
@@ -90,13 +110,18 @@ public abstract class Player {
         }
     }
 
+    public final boolean animateMove() {
+        ++this.getColumn;
+        return this.getColumn > 50;
+    }
+
     public final void setupAnimateMove(BoardCell c, boolean bl) {
         this.getCell = true;
         this.getColumn = bl ? -50 : 0;
         this.getPlayer = c;
         this.getInstance = this.board.getCell(this.row, this.col);
-        //this.getRow = new Timer(10, new L(this));
-        //this.getRow.start();
+        this.getRow = new Timer(10, new L(this));
+        this.getRow.start();
     }
 
     public final void updateSeen(Card d) {
@@ -147,5 +172,13 @@ public abstract class Player {
 
     public final boolean getMayStay() {
         return this.mayStay;
+    }
+
+    static final /* synthetic */ void I(Player m, boolean bl) {
+        m.getCell = bl;
+    }
+
+    static final /* synthetic */ Timer I(Player m) {
+        return m.getRow;
     }
 }

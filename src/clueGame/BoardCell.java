@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 public class BoardCell {
-	private boolean RIGHT = false;
+	private boolean isTarget = false;
 	public int row, col;
 	private final Boolean isRoom = false;
 	private Boolean isOccupied = false;
@@ -62,7 +62,7 @@ public class BoardCell {
 	public final void drawCell(Graphics2D graphics2D, int n, int n2, int n3) {
 		int n4 = this.row * n + n3;
 		int n5 = this.col * n + n2;
-		if (this.RIGHT){
+		if (this.isTarget){
 			graphics2D.setColor(Color.CYAN);
 		} else if (this.isWalkway()) {
 			graphics2D.setColor(Color.YELLOW);
@@ -191,6 +191,6 @@ public class BoardCell {
 	}
 
 	public final void setHighlight(boolean bl) {
-		this.RIGHT = bl;
+		this.isTarget = bl;
 	}
 }
