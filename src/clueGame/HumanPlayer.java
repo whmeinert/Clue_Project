@@ -19,6 +19,11 @@ public class HumanPlayer extends Player{
         this.board.highlightTargets(true);
     }
 
+    public final void finishTurn(BoardCell c) {
+        this.mayStay = true;
+        this.setLoc(c, false);
+    }
+
     public boolean isFinished() {
         return this.mayStay;
     }

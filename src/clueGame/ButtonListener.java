@@ -13,11 +13,7 @@ class ButtonListener
 
     @Override
     public final void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource() == GameControlPanel.I(this.getSource)) {
-            this.getSource.nextPlayer();
-        } else if (actionEvent.getSource() == GameControlPanel.Z(this.getSource)) {
-            //GameControlPanel.C(this.getSource).makeAccusation();
-        }
+        this.getSource.nextPlayer();
     }
 
     /* synthetic */ ButtonListener(GameControlPanel a, ButtonListener s) {

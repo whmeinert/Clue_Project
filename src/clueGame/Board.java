@@ -2,11 +2,13 @@ package clueGame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
     private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
@@ -33,6 +35,9 @@ public class Board extends JPanel {
     private KnownCardsPanel clearCards;
     private int addAdj = -1;
     private Player addMouseListener;
+    int close;
+    int contains;
+    int contentEquals;
 
     // constructor is private to ensure only one can be created
     private Board() {
@@ -352,6 +357,27 @@ public class Board extends JPanel {
         Collections.sort(this.cards);
     }
 
+    public final boolean makeAccusation() {
+        boolean bl = false;
+        if (this.humanPlayer.isFinished()) {
+            JOptionPane.showMessageDialog(null, "It is not your turn!");
+            return bl;
+        }
+        G g = new G(this, null);
+        g.setVisible(true);
+        if (g.isSubmitted()) {
+            Solution o = g.getSolution();
+            bl = this.checkAccusation(o);
+            if (bl) {
+                JOptionPane.showMessageDialog(null, "You win!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Sorry, not correct! You lose!");
+            }
+            System.exit(0);
+        }
+        return bl;
+    }
+
     public final boolean checkAccusation(Solution solution) {
         return solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room);
     }
@@ -366,6 +392,33 @@ public class Board extends JPanel {
             return null;
         } while ((card = otherPlayer.disproveSuggestion(solution)) == null);
         return card;
+    }
+
+    public final boolean doSuggestion(Solution o, Player m, BoardCell c) {
+        this.checkAccusation.setGuess(String.valueOf(o.person.getCardName()) + ", " + o.room.getCardName() + ", " + o.weapon.getCardName(), m.getColor());
+        this.ROOM(o.person, c);
+        Card d = this.handleSuggestion(o, m);
+        if (d != null) {
+            m.updateSeen(d);
+            if (m == this.humanPlayer) {
+                this.checkAccusation.setGuessResult(d.getCardName(), d.getHoldingPlayer().getColor());
+                this.clearCards.updatePanels();
+            } else {
+                this.checkAccusation.setGuessResult("Suggestion disproven!", d.getHoldingPlayer().getColor());
+            }
+        } else {
+            this.checkAccusation.setGuessResult("No new clue", null);
+        }
+        return d != null;
+    }
+
+    private void ROOM(Card d, BoardCell c) {
+        for (Player m : this.players) {
+            if (!m.getName().contentEquals(d.getCardName())) continue;
+            m.setLoc(c, true);
+            m.setMayStay(true);
+            break;
+        }
     }
 
     @Override
@@ -405,11 +458,46 @@ public class Board extends JPanel {
         }
     }
 
-    public final void nextPlayer() {
-        if (!this.humanPlayer.isFinished()) {
-            JOptionPane.showMessageDialog(null, "Please finish your turn!");
+    @Override
+    public final void mouseReleased(MouseEvent mouseEvent) {
+        if (this.humanPlayer.isFinished()) {
             return;
         }
+        BoardCell c = this.findClickedCell(mouseEvent.getX(), mouseEvent.getY());
+        if (c == null) {
+            JOptionPane.showMessageDialog(null, "That is not a target");
+        } else {
+            this.humanPlayer.finishTurn(c);
+            this.highlightTargets(false);
+            this.repaint();
+            if (c.isRoom()) {
+                Room n = c.getRoom();
+                G g = new G(this, n);
+                g.setVisible(true);
+                if (g.isSubmitted()) {
+                    this.doSuggestion(g.getSolution(), this.getHuman(), c);
+                    this.repaint();
+                }
+            }
+        }
+    }
+
+    public final BoardCell findClickedCell(int n, int n2) {
+        if (this.targets != null) {
+            int n3 = (n2 - this.contentEquals) / this.close;
+            int n4 = (n - this.contains) / this.close;
+            BoardCell c = this.grid[n3][n4];
+            if (c.isRoom()) {
+                c = c.getRoom().getCenterCell();
+            }
+            if (this.targets.contains(c)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public final void nextPlayer() {
         this.addAdj = (this.addAdj + 1) % this.players.size();
         this.addMouseListener = (Player)this.players.get(this.addAdj);
         int n = this.random.nextInt(5) + 1;
@@ -417,6 +505,22 @@ public class Board extends JPanel {
         this.calcTargets(this.getCell(this.addMouseListener.getRow(), this.addMouseListener.getColumn()), n, this.addMouseListener.getMayStay());
         this.addMouseListener.makeMove();
         this.repaint();
+    }
+
+    @Override
+    public final void mouseClicked(MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public final void mouseEntered(MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public final void mousePressed(MouseEvent mouseEvent) {
+    }
+
+    @Override
+    public final void mouseExited(MouseEvent mouseEvent) {
     }
 
     public final void boardRepaint() {

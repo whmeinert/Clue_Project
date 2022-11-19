@@ -32,7 +32,7 @@ public class Room {
 
 	// getters and setters
 	
-	public Object getName() {
+	public String getName() {
 		return this.name;
 	}
 
