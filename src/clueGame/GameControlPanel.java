@@ -54,16 +54,6 @@ public class GameControlPanel extends JPanel {
         return jPanel;
     }
 
-    // Creates the panel that displays the current player
-    private JPanel getPlayer() {
-        JPanel jPanel = new JPanel();
-        jPanel.add(new JLabel("Whose turn?"));
-        this.currPlayerField = new JTextField(15);
-        this.currPlayerField.setEditable(false);
-        jPanel.add(this.currPlayerField);
-        return jPanel;
-    }
-
     // Creates and sets the panels in the lower half of the main panel
     private JPanel getLowerPanels() {
         JPanel jPanel = new JPanel();
