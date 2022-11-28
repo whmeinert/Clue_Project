@@ -361,8 +361,29 @@ public class Board extends JPanel implements MouseListener {
         Collections.sort(this.cards);
     }
 
+    public final boolean makeAccusation() {
+        boolean bl = false;
+        if (this.humanPlayer.isFinished()) {
+            JOptionPane.showMessageDialog(null, "It is not your turn!");
+            return bl;
+        }
+        G g = new G(this, null);
+        g.setVisible(true);
+        if (g.isSubmitted()) {
+            Solution o = g.getSolution();
+            bl = this.checkAccusation(o);
+            if (bl) {
+                JOptionPane.showMessageDialog(null, "You win!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Sorry, not correct! You lose!");
+            }
+            System.exit(0);
+        }
+        return bl;
+    }
+
     public final boolean checkAccusation(Solution solution) {
-        return solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room);
+        return (solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room));
     }
 
     public final boolean doSuggestion(Solution o, Player m, BoardCell c) {

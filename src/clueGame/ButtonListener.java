@@ -16,7 +16,7 @@ class ButtonListener
         if (actionEvent.getSource() == GameControlPanel.I(this.getSource)) {
             this.getSource.nextPlayer();
         } else if (actionEvent.getSource() == GameControlPanel.Z(this.getSource)) {
-            //GameControlPanel.C(this.getSource).makeAccusation();
+            GameControlPanel.C(this.getSource).makeAccusation();
         }
     }
 
