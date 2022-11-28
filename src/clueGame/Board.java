@@ -365,6 +365,24 @@ public class Board extends JPanel implements MouseListener {
         return solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room);
     }
 
+    public final boolean doSuggestion(Solution o, Player m, BoardCell c) {
+        this.gameControlPanel.setGuess(String.valueOf(o.person.getCardName()) + ", " + o.room.getCardName() + ", " + o.weapon.getCardName(), m.getBackColor());
+        this.ROOM(o.person, c);
+        Card d = this.handleSuggestion(o, m);
+        if (d != null) {
+            m.updateSeen(d);
+            if (m == this.humanPlayer) {
+                this.gameControlPanel.setGuessResult(d.getCardName(), d.getHoldingPlayer().getBackColor());
+                this.knownCardsPanel.updatePanels();
+            } else {
+                this.gameControlPanel.setGuessResult("Suggestion disproven!", d.getHoldingPlayer().getBackColor());
+            }
+        } else {
+            this.gameControlPanel.setGuessResult("No new clue", null);
+        }
+        return d != null;
+    }
+
     public final Card handleSuggestion(Solution solution, Player currPlayer) {
         Player otherPlayer;
         Card card;
@@ -375,6 +393,15 @@ public class Board extends JPanel implements MouseListener {
             return null;
         } while ((card = otherPlayer.disproveSuggestion(solution)) == null);
         return card;
+    }
+
+    private void ROOM(Card d, BoardCell c) {
+        for (Player m : this.players) {
+            if (!m.getName().contentEquals(d.getCardName())) continue;
+            m.setLoc(c, true);
+            m.setMayStay(true);
+            break;
+        }
     }
 
     @Override
@@ -429,6 +456,15 @@ public class Board extends JPanel implements MouseListener {
             this.humanPlayer.finishTurn(clickedCell);
             this.highlightTargets(false);
             this.repaint();
+            if (clickedCell.isRoom()) {
+                Room n = clickedCell.getRoom();
+                G g = new G(this, n);
+                g.setVisible(true);
+                if (g.isSubmitted()) {
+                    this.doSuggestion(g.getSolution(), this.getHuman(), clickedCell);
+                    this.repaint();
+                }
+            }
         }
     }
 
