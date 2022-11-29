@@ -1,5 +1,6 @@
 package clueGame;
 
+import javax.swing.*;
 import java.util.*;
 
 public class ComputerPlayer extends Player{
@@ -56,6 +57,22 @@ public class ComputerPlayer extends Player{
         cell.setScore(n);
     }
 
+    public final void makeSuggestion(BoardCell c) {
+        Room n = c.getRoom();
+        this.solution = this.createSuggestion(n);
+        if (!this.board.doSuggestion(this.solution, this, n.getCenterCell()) && this.dontHaveRoomCard(n.getCard())) {
+            this.hasMoved = true;
+        }
+    }
+
+    public final boolean dontHaveRoomCard(Card d) {
+        for (Card d2 : this.seenCards) {
+            if (!d2.equals(d)) continue;
+            return false;
+        }
+        return true;
+    }
+
     public final Solution createSuggestion(Room room) {
         Solution newSuggestion = new Solution();
         newSuggestion.room = room.getCard();
@@ -78,9 +95,27 @@ public class ComputerPlayer extends Player{
 
     @Override
     public final void makeMove() {
-        Set targets = this.board.getTargets();
-        BoardCell cell = this.selectTarget(targets);
-        this.setLoc(cell, false);
+        if (this.hasMoved) {
+            this.makeAccusation();
+        } else {
+            Set targets = this.board.getTargets();
+            BoardCell cell = this.selectTarget(targets);
+            this.setLoc(cell, false);
+            if (cell.isRoom()) {
+                this.makeSuggestion(cell);
+            }
+        }
+    }
+
+    public final void makeAccusation() {
+        String string = String.valueOf(this.solution.person.getCardName()) + ", " + this.solution.room.getCardName() + ", " + this.solution.weapon.getCardName();
+        boolean bl = this.board.checkAccusation(this.solution);
+        if (bl) {
+            JOptionPane.showMessageDialog(null, "The computer just won, answer is " + string);
+            System.exit(0);
+        } else {
+            JOptionPane.showMessageDialog(null, "The computer made an incorrect guess of " + string);
+        }
     }
 
 }
