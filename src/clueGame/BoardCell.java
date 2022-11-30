@@ -16,7 +16,6 @@ public class BoardCell {
 	private Boolean roomCenter = false;
 	private char secretPassage;
 	Room room;
-	private Room add;
 	private int score;
 
 	

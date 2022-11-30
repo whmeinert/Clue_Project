@@ -57,17 +57,17 @@ public class ComputerPlayer extends Player{
         cell.setScore(n);
     }
 
-    public final void makeSuggestion(BoardCell c) {
-        Room n = c.getRoom();
-        this.solution = this.createSuggestion(n);
-        if (!this.board.doSuggestion(this.solution, this, n.getCenterCell()) && this.dontHaveRoomCard(n.getCard())) {
+    public final void makeSuggestion(BoardCell cell) {
+        Room room = cell.getRoom();
+        this.solution = this.createSuggestion(room);
+        if (!this.board.doSuggestion(this.solution, this, room.getCenterCell()) && this.dontHaveRoomCard(room.getCard())) {
             this.hasMoved = true;
         }
     }
 
-    public final boolean dontHaveRoomCard(Card d) {
-        for (Card d2 : this.seenCards) {
-            if (!d2.equals(d)) continue;
+    public final boolean dontHaveRoomCard(Card card) {
+        for (Card card1 : this.seenCards) {
+            if (!card1.equals(card)) continue;
             return false;
         }
         return true;
@@ -109,8 +109,8 @@ public class ComputerPlayer extends Player{
 
     public final void makeAccusation() {
         String string = String.valueOf(this.solution.person.getCardName()) + ", " + this.solution.room.getCardName() + ", " + this.solution.weapon.getCardName();
-        boolean bl = this.board.checkAccusation(this.solution);
-        if (bl) {
+        boolean checkAccusation = this.board.checkAccusation(this.solution);
+        if (checkAccusation) {
             JOptionPane.showMessageDialog(null, "The computer just won, answer is " + string);
             System.exit(0);
         } else {

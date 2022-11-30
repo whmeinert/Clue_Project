@@ -362,37 +362,37 @@ public class Board extends JPanel implements MouseListener {
     }
 
     public final boolean makeAccusation() {
-        boolean bl = false;
+        boolean isCorrect = false;
         if (this.humanPlayer.isFinished()) {
             JOptionPane.showMessageDialog(null, "It is not your turn!");
-            return bl;
+            return isCorrect;
         }
-        G g = new G(this, null);
-        g.setVisible(true);
-        if (g.isSubmitted()) {
-            Solution o = g.getSolution();
-            bl = this.checkAccusation(o);
-            if (bl) {
+        SuggAccDialogBox dialogBox = new SuggAccDialogBox(this, null);
+        dialogBox.setVisible(true);
+        if (dialogBox.isSubmitted()) {
+            Solution solution = dialogBox.getSolution();
+            isCorrect = this.checkAccusation(solution);
+            if (isCorrect) {
                 JOptionPane.showMessageDialog(null, "You win!");
             } else {
                 JOptionPane.showMessageDialog(null, "Sorry, not correct! You lose!");
             }
             System.exit(0);
         }
-        return bl;
+        return isCorrect;
     }
 
     public final boolean checkAccusation(Solution solution) {
         return (solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room));
     }
 
-    public final boolean doSuggestion(Solution o, Player m, BoardCell c) {
-        this.gameControlPanel.setGuess(String.valueOf(o.person.getCardName()) + ", " + o.room.getCardName() + ", " + o.weapon.getCardName(), m.getBackColor());
-        this.ROOM(o.person, c);
-        Card d = this.handleSuggestion(o, m);
+    public final boolean doSuggestion(Solution solution, Player player, BoardCell cell) {
+        this.gameControlPanel.setGuess(String.valueOf(solution.person.getCardName()) + ", " + solution.room.getCardName() + ", " + solution.weapon.getCardName(), player.getBackColor());
+        this.movePlayer(solution.person, cell);
+        Card d = this.handleSuggestion(solution, player);
         if (d != null) {
-            m.updateSeen(d);
-            if (m == this.humanPlayer) {
+            player.updateSeen(d);
+            if (player == this.humanPlayer) {
                 this.gameControlPanel.setGuessResult(d.getCardName(), d.getHoldingPlayer().getBackColor());
                 this.knownCardsPanel.updatePanels();
             } else {
@@ -416,11 +416,11 @@ public class Board extends JPanel implements MouseListener {
         return card;
     }
 
-    private void ROOM(Card d, BoardCell c) {
-        for (Player m : this.players) {
-            if (!m.getName().contentEquals(d.getCardName())) continue;
-            m.setLoc(c, true);
-            m.setMayStay(true);
+    private void movePlayer(Card card, BoardCell cell) {
+        for (Player player : this.players) {
+            if (!player.getName().contentEquals(card.getCardName())) continue;
+            player.setLoc(cell, true);
+            player.setMayStay(true);
             break;
         }
     }
@@ -479,7 +479,7 @@ public class Board extends JPanel implements MouseListener {
             this.repaint();
             if (clickedCell.isRoom()) {
                 Room n = clickedCell.getRoom();
-                G g = new G(this, n);
+                SuggAccDialogBox g = new SuggAccDialogBox(this, n);
                 g.setVisible(true);
                 if (g.isSubmitted()) {
                     this.doSuggestion(g.getSolution(), this.getHuman(), clickedCell);
