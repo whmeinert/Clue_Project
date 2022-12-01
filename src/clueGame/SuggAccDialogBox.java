@@ -23,9 +23,13 @@ public class SuggAccDialogBox extends JDialog {
         this.setSize(350, 250);
         this.setLayout(new GridLayout(4, 2));
         this.setModal(true);
+
+        // Create combo boxes for each card types
         this.WEAPON = new JComboBox();
         this.PERSON = new JComboBox();
         this.ROOM = new JComboBox();
+
+        // Check if the user is in a room or not and do a suggestion or an accusation based on that
         if (room == null) {
             this.setTitle("Make an Accusation");
             this.addComboBoxes(this.WEAPON, CardType.ROOM, " Room");
@@ -47,7 +51,10 @@ public class SuggAccDialogBox extends JDialog {
     }
 
     private void addComboBoxes(JComboBox jComboBox, CardType cardType, String string) {
+        // Shuffle card list to prevent solution being first option
         Collections.shuffle(this.cardList);
+
+        // iterate through each card and add it to the combo box
         for (Object object2 : this.cardList) {
             if (((Card)object2).getCardType() != cardType) continue;
             jComboBox.addItem(((Card)object2).getCardName());
@@ -58,6 +65,7 @@ public class SuggAccDialogBox extends JDialog {
     }
 
     private void addButtons() {
+        // Add the submit and cancel button to the box
         this.submitButton = new JButton("Submit");
         this.add(this.submitButton);
         this.cancelButton = new JButton("Cancel");

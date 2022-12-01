@@ -10,6 +10,7 @@ public class ComputerPlayer extends Player{
         super(name, row, col, color);
     }
 
+    // Get the list of possible moves and select one of the options based on a score value
     public final BoardCell selectTarget(Set<BoardCell> targets) {
         ArrayList<BoardCell> arrayList = new ArrayList<>();
         if (targets.size() == 0) {
@@ -28,6 +29,7 @@ public class ComputerPlayer extends Player{
         return arrayList.get(n2);
     }
 
+    // Check if the cell has been seen before and update the score of that cell
     private void checkCell(BoardCell cell) {
         int n = 1000;
         if (cell.isRoom()) {
@@ -57,6 +59,7 @@ public class ComputerPlayer extends Player{
         cell.setScore(n);
     }
 
+    // Make a suggestion
     public final void makeSuggestion(BoardCell cell) {
         Room room = cell.getRoom();
         this.solution = this.createSuggestion(room);
@@ -65,6 +68,7 @@ public class ComputerPlayer extends Player{
         }
     }
 
+    // Check if the cpu has the room card in their seen cards
     public final boolean dontHaveRoomCard(Card card) {
         for (Card card1 : this.seenCards) {
             if (!card1.equals(card)) continue;
@@ -73,6 +77,7 @@ public class ComputerPlayer extends Player{
         return true;
     }
 
+    // Write the suggestion to the dialog boxes
     public final Solution createSuggestion(Room room) {
         Solution newSuggestion = new Solution();
         newSuggestion.room = room.getCard();
@@ -107,6 +112,7 @@ public class ComputerPlayer extends Player{
         }
     }
 
+    // Make an accusation and display the win message accordingly
     public final void makeAccusation() {
         String string = String.valueOf(this.solution.person.getCardName()) + ", " + this.solution.room.getCardName() + ", " + this.solution.weapon.getCardName();
         boolean checkAccusation = this.board.checkAccusation(this.solution);

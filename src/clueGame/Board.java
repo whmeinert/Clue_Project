@@ -317,6 +317,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    // Deal cards to each player
     public final void deal() {
         int n = 0;
 
@@ -361,14 +362,17 @@ public class Board extends JPanel implements MouseListener {
         Collections.sort(this.cards);
     }
 
+    // handle a player making an accusation
     public final boolean makeAccusation() {
         boolean isCorrect = false;
+        // Check if it is the human players turn
         if (this.humanPlayer.isFinished()) {
             JOptionPane.showMessageDialog(null, "It is not your turn!");
             return isCorrect;
         }
         SuggAccDialogBox dialogBox = new SuggAccDialogBox(this, null);
         dialogBox.setVisible(true);
+        // Check if the accusation is correct and display the correct message accordingly
         if (dialogBox.isSubmitted()) {
             Solution solution = dialogBox.getSolution();
             isCorrect = this.checkAccusation(solution);
@@ -382,10 +386,12 @@ public class Board extends JPanel implements MouseListener {
         return isCorrect;
     }
 
+    // Check the players accusation
     public final boolean checkAccusation(Solution solution) {
         return (solution.person.equals(this.solution.person) && solution.weapon.equals(this.solution.weapon) && solution.room.equals(this.solution.room));
     }
 
+    // Handle a suggestion that is made moving the player and displaying the suggestion and the result in their dialog boxes
     public final boolean doSuggestion(Solution solution, Player player, BoardCell cell) {
         this.gameControlPanel.setGuess(String.valueOf(solution.person.getCardName()) + ", " + solution.room.getCardName() + ", " + solution.weapon.getCardName(), player.getBackColor());
         this.movePlayer(solution.person, cell);
@@ -404,6 +410,7 @@ public class Board extends JPanel implements MouseListener {
         return d != null;
     }
 
+    // Handle the logic of the suggestion to check if it can be disproven
     public final Card handleSuggestion(Solution solution, Player currPlayer) {
         Player otherPlayer;
         Card card;
@@ -416,6 +423,7 @@ public class Board extends JPanel implements MouseListener {
         return card;
     }
 
+    // Move the player to the specified location
     private void movePlayer(Card card, BoardCell cell) {
         for (Player player : this.players) {
             if (!player.getName().contentEquals(card.getCardName())) continue;
@@ -425,6 +433,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    // Draw the board
     @Override
     public final void paintComponent(Graphics graphics) {
         this.boardWidth = this.getWidth();
@@ -462,6 +471,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    // Check if the mouse is released to check for a click
     @Override
     public final void mouseReleased(MouseEvent mouseEvent) {
         // check if the player has moved
@@ -489,6 +499,7 @@ public class Board extends JPanel implements MouseListener {
         }
     }
 
+    // Calculate where the user clicked and what cell that corresponds to
     public final BoardCell findClickedCell(int y, int x) {
         if (this.targets != null) {
             // calculate the cell clicked on
@@ -507,6 +518,7 @@ public class Board extends JPanel implements MouseListener {
         return null;
     }
 
+    // Moves the game to the next player
     public final void nextPlayer() {
         // Check that the player has moved, if not display message
         if (!this.humanPlayer.isFinished()) {

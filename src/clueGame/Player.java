@@ -54,6 +54,7 @@ public abstract class Player {
         this.random = Board.getInstance().random;
     }
 
+    // Draw the players chip and animate their movement
     public final void drawPlayer(Graphics2D graphics2D, int n, int n2, int n3) {
         int n4;
         int n5;
@@ -86,21 +87,23 @@ public abstract class Player {
         graphics2D.drawOval(n5, n4, n - 1, n - 1);
     }
 
-    public final Card disproveSuggestion(Solution o) {
-        Card d3;
+    // Check a players hand to see if they can disprove a suggestion
+    public final Card disproveSuggestion(Solution solution) {
+        Card card;
         ArrayList<Card> arrayList = new ArrayList<>();
         for (Card d2 : this.cards) {
-            if (!d2.equals(o.person) && !d2.equals(o.weapon) && !d2.equals(o.room)) continue;
+            if (!d2.equals(solution.person) && !d2.equals(solution.weapon) && !d2.equals(solution.room)) continue;
             arrayList.add(d2);
         }
-        d3 = null;
+        card = null;
         if (arrayList.size() > 0) {
             int n = this.random.nextInt(arrayList.size());
-            d3 = (Card)arrayList.get(n);
+            card = (Card)arrayList.get(n);
         }
-        return d3;
+        return card;
     }
 
+    // Move the player to a new location
     public final void setLoc(BoardCell cell, boolean mayStay) {
         this.mayStay = false;
         if (cell != this.board.getCell(this.row, this.col)) {
@@ -112,16 +115,17 @@ public abstract class Player {
         }
     }
 
-    // add
+    // Increment the animation by one step and check if it is still moving
     public final boolean animateMove() {
         ++this.animationStep;
         return this.animationStep > 50;
     }
 
-    public final void setupAnimateMove(BoardCell c, boolean bl) {
+    // Sets variables to their required values to animate move
+    public final void setupAnimateMove(BoardCell cell, boolean bl) {
         this.canMove = true;
         this.animationStep = bl ? -50 : 0;
-        this.getPlayer = c;
+        this.getPlayer = cell;
         this.getInstance = this.board.getCell(this.row, this.col);
         this.timer = new Timer(10, new AnimateMove(this));
         this.timer.start();
@@ -181,7 +185,7 @@ public abstract class Player {
         player.canMove = bl;
     }
 
-    static final /* synthetic */ Timer I(Player m) {
-        return m.timer;
+    static final /* synthetic */ Timer I(Player player) {
+        return player.timer;
     }
 }
